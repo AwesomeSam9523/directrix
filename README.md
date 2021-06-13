@@ -27,13 +27,13 @@ AccountID | PersonName | Balance | RegDate |
  
  
 Table: `Loans`
-AccountID | LoanAmount | StartDate | EndDate | Tanure
+AccountID | LoanAmount | StartDate | EndDate | Tenure
 --------- | ---------- | --------- | ------- | ------
  | | | | 
 
 
 Table: `FixedDeposits`
-AccountID | Amount | InterestRate | StartDate | Tanure
+AccountID | Amount | InterestRate | StartDate | Tenure
 --------- | ------ | ------------ | --------- | ------
  | | | | 
 
