@@ -47,3 +47,4 @@ AccountID | Amount | InterestRate | StartDate | Tenure
 ## Contributors
 1. [Samaksh Gupta](https://github.com/AwesomeSam9523)
 2. [Vatsal Saxena](https://github.com/vatsal2025)
+3. [Ahaan Parashar](https://github.com/ahaan1717)
