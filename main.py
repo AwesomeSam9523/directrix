@@ -1,8 +1,27 @@
 # Directric Bank
 # Refer README.md for features and contributions
+"""
+Vatsy:
+
+[
+(col1, col2)
+()
+()
+]
+
+"""
+def create_login(username, password):
+    with open("data/accounts.csv", "r") as file:
+        accounts = csv.reader(file)
+
+def use_login(username, password):
+    with open("data/accounts.csv", "r") as file:
+        accounts = csv.reader(file)
+
 
 from tkinter import *
 from PIL import Image, ImageFont, ImageDraw, ImageTk
+import csv
 
 def restore_root():
     if root.fs:
