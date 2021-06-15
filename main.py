@@ -11,12 +11,15 @@ Vatsy:
 
 """
 def create_login(username, password):
-    with open("data/accounts.csv", "r") as file:
+    with open("data/login.csv", "r") as file:
         accounts = csv.reader(file)
 
 def use_login(username, password):
-    with open("data/accounts.csv", "r") as file:
-        accounts = csv.reader(file)
+    rows = []
+    with open("data/login.csv", "r") as file:
+        accounts = csv.DictReader(file)
+        for acc in accounts:
+            print(acc)
 
 
 from tkinter import *
@@ -54,4 +57,6 @@ close.grid(row=0, column=1, padx=3)
 restore = Button(mainbg, text="Restore", command=restore_root)
 restore.grid(row=0, column=0)
 
-root.mainloop()
+login_field = Entry()
+use_login("user", "pass")
+#root.mainloop()
