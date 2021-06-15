@@ -1,5 +1,5 @@
 # Directrix Bank
-
+![Login Page](https://media.discordapp.net/attachments/853540750616821791/853671281541775410/unknown.png?width=1280&height=720)
 ## About
 This is a GUI bank made using python and connected to SQL. This is a demo about how bank management system works.
 
@@ -47,3 +47,4 @@ AccountID | Amount | InterestRate | StartDate | Tenure
 ## Contributors
 1. [Samaksh Gupta](https://github.com/AwesomeSam9523)
 2. [Vatsal Saxena](https://github.com/vatsal2025)
+3. [Ahaan Parashar](https://github.com/ahaan1717)
