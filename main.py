@@ -41,30 +41,21 @@ def create_login():
         status.configure(text="Username doesn't exist!", fg="#FF0000")
 
 def create_acc():
-    import csv
-    from csv import writer
 
-    fields = ['Username', 'Password']
 
     usen = input('Pls enter a username: ')
     pas = input('Pls enter a password: ')
-    List = ['usen', 'pas']
+    email = input('Pls enter your email: ')
+    add = input('Pls enter your address: ')
+    age = int(input('Pls enter your age: '))
+    gn = input('Pls enter your gender: ')
+    mno= input('Pls enter your mobile number: ')
+    pan= input('Pls enter your pan number: ')
+    acn = input('Pls enter your aadhar card number: ')
 
-    with open('data/login.csv', 'a') as f_object:
-        # Pass this file object to csv.writer()
-        # and get a writer object
-        writer_object = writer(f_object)
-
-        # writing headers (field names)
-        writer.writeheader()
-
-        # Pass the list as an argument into
-        # the writerow()
-        writer_object.writerow(List)
-
-        # Close the file object
-        f_object.close()
-
+    root.accountsdata[accountno] = {"password":pas, "email":email, "address":add, "age":age, "Gender":gn, "MOBILE NUMBER": mno, "PAN NO.":pan, "AADHAR CARD NO.":acn}
+    with open('data/accounts.json', 'w') as file:
+        file.write(root.accountsdata)
 
 
 def restore_root():
