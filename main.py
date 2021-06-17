@@ -40,6 +40,33 @@ def create_login():
     if not found:
         status.configure(text="Username doesn't exist!", fg="#FF0000")
 
+def create_acc():
+    import csv
+    from csv import writer
+
+    fields = ['Username', 'Password']
+
+    usen = input('Pls enter a username: ')
+    pas = input('Pls enter a password: ')
+    List = ['usen', 'pas']
+
+    with open('data/login.csv', 'a') as f_object:
+        # Pass this file object to csv.writer()
+        # and get a writer object
+        writer_object = writer(f_object)
+
+        # writing headers (field names)
+        writer.writeheader()
+
+        # Pass the list as an argument into
+        # the writerow()
+        writer_object.writerow(List)
+
+        # Close the file object
+        f_object.close()
+
+
+
 def restore_root():
     if root.fs:
         root.attributes('-fullscreen', False)
