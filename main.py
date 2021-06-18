@@ -55,6 +55,13 @@ def create_acc():
     with open('data/accounts.json', 'w') as file:
         file.write(root.accountsdata)
 
+def submit_data():
+    login_field.place_forget()
+    password_field.place_forget()
+    submit_login.place_forget()
+    submit_create.place_forget()
+    status.place_forget()
+
 def restore_root():
     if root.fs:
         root.attributes('-fullscreen', False)
@@ -113,9 +120,9 @@ mainbg = Frame(root, width=root.wm_maxsize()[0], height=25)
 mainbg.place(x=x(0), y=y(0))
 
 close = Button(mainbg, text="Close", command=root.destroy)
-close.place(x=x(root.x- 42), y=y(2))
+close.place(x=(root.x- x(42)), y=y(2))
 restore = Button(mainbg, text="Restore", command=restore_root)
-restore.place(x=x(root.x- 93), y=y(2))
+restore.place(x=(root.x- x(93)), y=y(2))
 
 login_field = Entry(root, width=x(25), font=("Helvetica", 22))
 login_field.place(x=x(95), y=y(350))
@@ -127,7 +134,7 @@ password_field.place(x=x(95), y=y(490))
 submit_login = Button(root, text="Login", font=("Arial", 18), width=x(14), bg="#62E1FF", command=create_login)
 submit_login.place(x=x(85), y=y(600))
 
-submit_create = Button(root, text="Create Account", font=("Arial", 18), width=x(14), bg="#62E1FF")
+submit_create = Button(root, text="Create Account", font=("Arial", 18), width=x(14), bg="#62E1FF", command=submit_data)
 submit_create.place(x=x(300), y=y(600))
 
 status = Label(root, font=("Helvetica", 16), bg="#ffffff", fg="#FF0000")
