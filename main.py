@@ -113,15 +113,15 @@ mainbg = Frame(root, width=root.wm_maxsize()[0], height=25)
 mainbg.place(x=x(0), y=y(0))
 
 close = Button(mainbg, text="Close", command=root.destroy)
-close.place(x=x(root.x- x(42)), y=y(2))
+close.place(x=x(root.x- 42), y=y(2))
 restore = Button(mainbg, text="Restore", command=restore_root)
-restore.place(x=x(root.x- x(93)), y=y(2))
+restore.place(x=x(root.x- 93), y=y(2))
 
-login_field = Entry(root, width=25, font=("Helvetica", 22))
+login_field = Entry(root, width=x(25), font=("Helvetica", 22))
 login_field.place(x=x(95), y=y(350))
 login_field.focus_set()
 
-password_field = Entry(root, width=25, font=("Helvetica", 22), show="*")
+password_field = Entry(root, width=x(25), font=("Helvetica", 22), show="*")
 password_field.place(x=x(95), y=y(490))
 
 submit_login = Button(root, text="Login", font=("Arial", 18), width=x(14), bg="#62E1FF", command=create_login)
