@@ -31,7 +31,7 @@ def create_login():
     for acc in root.accountsdata.keys():
         if acc == username.lower():
             if root.accountsdata[acc]["password"] == password:
-                dashboard()
+                dashboard(root.accountsdata[acc])
             else:
                 status.configure(text="Incorrect Password!", fg="#FF0000")
                 return
@@ -53,10 +53,9 @@ def create_acc():
     pan= input('Pls enter your pan number: ')
     acn = input('Pls enter your aadhar card number: ')
 
-    root.accountsdata[accountno] = {"password":pas, "email":email, "address":add, "age":age, "Gender":gn, "MOBILE NUMBER": mno, "PAN NO.":pan, "AADHAR CARD NO.":acn}
+    root.accountsdata["123"] = {"password":pas, "email":email, "address":add, "age":age, "Gender":gn, "MOBILE NUMBER": mno, "PAN NO.":pan, "AADHAR CARD NO.":acn}
     with open('data/accounts.json', 'w') as file:
         file.write(root.accountsdata)
-
 
 def restore_root():
     if root.fs:
@@ -72,7 +71,7 @@ def restore_root():
         restore.place(x=x(root.x - x(93)), y=y(2))
         close.place(x=x(root.x - x(42)), y=y(2))
 
-def dashboard():
+def dashboard(data):
     login_field.place_forget()
     password_field.place_forget()
     submit_login.place_forget()
@@ -89,6 +88,13 @@ def dashboard():
     topframe.place(x=0, y=y(25))
 
     userimg = Image.open("data/images/user.png").resize((x(40), y(40)))
+    userimg = ImageTk.PhotoImage(userimg)
+    userimage = Canvas(root, width=x(50), height=y(50))
+    userimage.create_image(0, 0, image=userimg, anchor="nw")
+    userimage.place(x=x(25), y=y(40))
+
+    welcome = Label(topframe, text=f"Welcome, {data['name']}!", font=("Arial", 20), bg="#B576FF")
+    welcome.place(x=x(85), y=(20))
 
 root = Tk()
 root.geometry(f"{root.wm_maxsize()[0]}x{root.wm_maxsize()[1]}")
