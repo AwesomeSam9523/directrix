@@ -5,6 +5,7 @@
 import time, json
 from tkinter import *
 from PIL import Image, ImageFont, ImageDraw, ImageTk
+import decimal
 import csv
 
 def x(value):
@@ -54,6 +55,31 @@ def create_acc():
     root.accountsdata["123"] = {"password":pas, "email":email, "address":add, "age":age, "Gender":gn, "MOBILE NUMBER": mno, "PAN NO.":pan, "AADHAR CARD NO.":acn}
     with open('data/accounts.json', 'w') as file:
         file.write(root.accountsdata)
+
+
+
+def get_user_input(action):
+    balance = Balance_field.get()
+  # Get user input and convert it to decimal type
+  return decimal.Decimal(input("Please enter amount to {} from your account: ".format(action)))
+
+def withdraw():
+  amount = get_user_input("withdraw")
+  return balance - amount
+
+def deposit():
+  amount = get_user_input("deposit")
+  return balance + amount
+
+with open('data/data.json', 'w') as file:
+    file.write(root.data)
+
+
+'''print("Your Balance is {} AED".format(balance))
+balance = withdraw()
+balance = deposit()
+print("Your Balance is {} AED".format(balance))'''
+
 
 def restore_root():
     if root.fs:
