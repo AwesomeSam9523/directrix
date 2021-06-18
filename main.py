@@ -8,10 +8,10 @@ from PIL import Image, ImageFont, ImageDraw, ImageTk
 import csv
 
 def x(value):
-    return int((1536/root.wm_maxsize()[0])*value)
+    return int((root.wm_maxsize()[0]/1536)*value)
 
 def y(value):
-    return int((864/root.wm_maxsize()[1])*value)
+    return int((root.wm_maxsize()[1]/864)*value)
 
 def create_login():
     username = login_field.get()
@@ -41,8 +41,6 @@ def create_login():
         status.configure(text="Username doesn't exist!", fg="#FF0000")
 
 def create_acc():
-
-
     usen = input('Pls enter a username: ')
     pas = input('Pls enter a password: ')
     email = input('Pls enter your email: ')
