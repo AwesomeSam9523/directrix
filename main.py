@@ -148,15 +148,24 @@ with open("data/data.json", "r") as f:
     root.data = json.load(f)
 
 def withdraw():
-  amount = input()
-  balance - amount
+  userid = 867375658
+  var = root.data.get(userid)
+  print(var)
+  balance = var.get(balance)
+  withd = input('Please enter the amount you want to withdraw = ')
+  nam = balance - withd
 
 def deposit():
-  amount = input()
-  balance + amount
+    userid = 867375658
+    var = root.data.get(userid)
+    print(var)
+    balance = var.get('balance')
+    dep = input('Please enter the amount you want to deposit = ')
+    nwd = balance + dep
+
 
 with open('data/data.json', 'w') as file:
-    file.write(json.dumps(root.data))
+    file.write(json.dumps(root.data,indent=2))
 
 
 root.mainloop()
