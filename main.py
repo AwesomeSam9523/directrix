@@ -151,7 +151,7 @@ def withdraw():
   userid = 867375658
   var = root.data.get(userid)
   print(var)
-  balance = var.get(balance)
+  balance = var.get('balance')
   withd = input('Please enter the amount you want to withdraw = ')
   nam = balance - withd
 
