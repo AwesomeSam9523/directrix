@@ -197,9 +197,6 @@ def savecode():
         file.write(json.dumps(root.data, indent=2))
 
 
-
-
-
 def deposit():
     userid = 8567375658
     var = root.data.get(str(userid))
