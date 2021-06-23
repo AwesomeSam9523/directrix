@@ -40,7 +40,46 @@ def create_login():
     if not found:
         status.configure(text="Username doesn't exist!", fg="#FF0000")
 
-def create_acc():
+def submit_data():
+    login_field.place_forget()
+    password_field.place_forget()
+    submit_login.place_forget()
+    submit_create.place_forget()
+    status.place_forget()
+
+    dashbg = Image.open("data/images/create_account.png")
+    dashbg = dashbg.resize(root.wm_maxsize())
+    root.bgimg = ImageTk.PhotoImage(dashbg)
+    bg_canvas.itemconfig(root.rootbgimage, image=root.bgimg)
+
+    fname = Entry(root, width=x(20), font=("Helvetica", 22))
+    fname.place(x=x(400), y=y(164))
+    lname = Entry(root, width=x(20), font=("Helvetica", 22))
+    lname.place(x=x(1060), y=y(164))
+    email = Entry(root, width=x(25), font=("Helvetica", 22))
+    email.place(x=x(400), y=y(238))
+    age = Entry(root, width=x(5), font=("Helvetica", 22))
+    age.place(x=x(1060), y=y(238))
+    pan = Entry(root, width=x(25), font=("Helvetica", 22))
+    pan.place(x=x(400), y=y(312))
+    gender = Entry(root, width=x(5), font=("Helvetica", 22))
+    gender.place(x=x(1060), y=y(312))
+    aadhar = Entry(root, width=x(25), font=("Helvetica", 22))
+    aadhar.place(x=x(400), y=y(386))
+    add1 = Entry(root, width=x(30), font=("Helvetica", 22))
+    add1.place(x=x(400), y=y(460))
+    add2 = Entry(root, width=x(30), font=("Helvetica", 22))
+    add2.place(x=x(400), y=y(534))
+    pswd = Entry(root, width=x(25), font=("Helvetica", 22), show="*")
+    pswd.place(x=x(540), y=y(662))
+    cpswd = Entry(root, width=x(25), font=("Helvetica", 22), show="*")
+    cpswd.place(x=x(540), y=y(736))
+
+    final = Button(root, text="Open Account", font=("Arial", 22), width=x(14), bg="#37FF4E")
+    final.place(x=x(1030), y=y(690))
+    cancel = Button(root, text="Cancel", font=("Arial", 22), width=x(11), bg="#FF4E3F")
+    cancel.place(x=x(1290), y=y(690))
+    return
     usen = input('Pls enter a username: ')
     pas = input('Pls enter a password: ')
     email = input('Pls enter your email: ')
@@ -55,13 +94,6 @@ def create_acc():
     with open('data/accounts.json', 'w') as file:
         file.write(root.accountsdata)
 
-
-def submit_data():
-    login_field.place_forget()
-    password_field.place_forget()
-    submit_login.place_forget()
-    submit_create.place_forget()
-    status.place_forget()
 
 def restore_root():
     if root.fs:
@@ -148,12 +180,12 @@ with open("data/data.json", "r") as f:
     root.data = json.load(f)
 
 def withdraw():
-  userid = 867375658
-  var = root.data.get(userid)
-  print(var)
-  balance = var.get('balance')
-  withd = input('Please enter the amount you want to withdraw = ')
-  nam = balance - withd
+    userid = 867375658
+    var = root.data.get(userid)
+    print(var)
+    balance = var.get('balance')
+    withd = input('Please enter the amount you want to withdraw = ')
+    nam = balance - withd
 
 def deposit():
     userid = 867375658
@@ -163,9 +195,7 @@ def deposit():
     dep = input('Please enter the amount you want to deposit = ')
     nwd = balance + dep
 
-
 with open('data/data.json', 'w') as file:
     file.write(json.dumps(root.data,indent=2))
-
 
 root.mainloop()
