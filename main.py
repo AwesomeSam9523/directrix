@@ -94,14 +94,6 @@ def submit_data():
     with open('data/accounts.json', 'w') as file:
         file.write(root.accountsdata)
 
-
-def submit_data():
-    login_field.place_forget()
-    password_field.place_forget()
-    submit_login.place_forget()
-    submit_create.place_forget()
-    status.place_forget()
-
 def restore_root():
     if root.fs:
         root.attributes('-fullscreen', False)
@@ -209,17 +201,49 @@ def savecode():
 
 
 def deposit():
-    userid = 867375658
-    var = root.data.get(userid)
+    userid = 8567375658
+    var = root.data.get(str(userid))
+    print(root.data)
     print(var)
     balance = var.get('balance')
-    dep = input('Please enter the amount you want to deposit = ')
-    nwd = balance + dep
+    dep = int(input("AMOUNT"))
+    alloted = balance*(.25)
+    if dep < alloted:
+        n_balance = dep + balance
+        print("THE AMOUNT HAS BEEN DEPOSITED YOUR NEW CURRENT BALANCE IS",n_balance)
+        root.data[str(userid)] = {"balance": n_balance}
+        savecode()
+    elif dep > alloted :
+        print("THE AMOUNT YOU WANT TO DEPOSIT IS LARGER THAN ALLOWED PLEASE REFER TO OUR TERMS AND CONDITIONS FOR FURTHER INFORMATION")
 
 
 with open('data/data.json', 'w') as file:
     file.write(json.dumps(root.data,indent=2))
 
+def loan():
+    userid = 8567375658
+    var = root.data.get(str(userid))
+    print(root.data)
+    print(var)
+    balance = var.get('balance')
+    exp = int(input("AMOUNT EXPECTED:"))
+    inc = int(input("ANNUAL INCOME:"))
+    credit_score = int(input("CREDIT SCORE:"))
+    if credit_score < 700 :
+        print("NOT ELIGIBLE BECAUSE YOUR CREDIT SCORE IS LESS")
+    else :
+        print("ELIGIBLE")
+    job     = input("YOUR OCCUPATION")
+    reason  = input("PURPOSE")
+    by_when = input("BY WHEN DO YOU REQUIRE THE AMOUNT:")
+    confirm_c = (inc/12)*(0.25)
+    interet = (exp*(0.25))/24
+    if confirm_c*(0.20) > interet:
+        print("CONFIRMED")
+    else :
+        print("NOT CONFIRMED BECAUSE THE AMOUNT EXPECTED IS TOO LARGE")
 
+
+withdraw()
 root.mainloop()
 
