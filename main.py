@@ -95,6 +95,13 @@ def submit_data():
         file.write(root.accountsdata)
 
 
+def submit_data():
+    login_field.place_forget()
+    password_field.place_forget()
+    submit_login.place_forget()
+    submit_create.place_forget()
+    status.place_forget()
+
 def restore_root():
     if root.fs:
         root.attributes('-fullscreen', False)
@@ -180,12 +187,26 @@ with open("data/data.json", "r") as f:
     root.data = json.load(f)
 
 def withdraw():
-    userid = 867375658
-    var = root.data.get(userid)
+    userid = 8567375658
+    var = root.data.get(str(userid))
+    print(root.data)
     print(var)
     balance = var.get('balance')
-    withd = input('Please enter the amount you want to withdraw = ')
-    nam = balance - withd
+    withd = int(input('Please enter the amount you want to withdraw = '))
+    if withd > balance:
+        print('!!! Insufficient Balance !!!')
+    else:
+        nam = balance - withd
+        root.data[str(userid)] = {"balance":nam}
+        savecode()
+
+def savecode():
+    with open('data/data.json', 'w') as file:
+        file.write(json.dumps(root.data, indent=2))
+
+
+
+
 
 def deposit():
     userid = 867375658
@@ -195,7 +216,10 @@ def deposit():
     dep = input('Please enter the amount you want to deposit = ')
     nwd = balance + dep
 
+
 with open('data/data.json', 'w') as file:
     file.write(json.dumps(root.data,indent=2))
 
+
 root.mainloop()
+
