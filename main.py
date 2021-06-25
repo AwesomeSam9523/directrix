@@ -264,6 +264,18 @@ with open("data/accounts.json", "r") as f:
 with open("data/data.json", "r") as f:
     root.data = json.load(f)
 
+with open("data/statements.json", "r") as f:
+    root.statements = json.load(f)
+
+
+def createstatements(CREDIT, balance):
+    userid = 8567375658
+    prev = root.statements.get(str(userid), [])
+    print(prev)
+    prev.append({"type": CREDIT, "balance": balance})
+    savecode()
+
+
 def withdraw():
     userid = 8567375658
     var = root.data.get(str(userid))
