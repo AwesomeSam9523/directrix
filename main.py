@@ -272,7 +272,9 @@ def createstatements(CREDIT, balance):
     userid = 8567375658
     prev = root.statements.get(str(userid), [])
     print(prev)
-    prev.append({"type": CREDIT, "balance": balance})
+
+    prev.append({"type": withdraw(), "Withdraw": nam})
+    prev.append({"type": deposit(), "Deposit": n_balance})
     savecode()
 
 
