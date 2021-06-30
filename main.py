@@ -19,10 +19,22 @@ def x(value):
 def y(value):
     return int((root.wm_maxsize()[1]/864)*value)
 
+def savedata():
+    with open('data/data.json', 'w') as file:
+        file.write(json.dumps(root.data, indent=2))
+
+    with open('data/accounts.json', 'w') as acc:
+        acc.write(json.dumps(root.accountsdata, indent=2))
+
+    with open('data/statements.json', 'w') as st:
+        st.write(json.dumps(root.statements, indent=2))
+
+
 def create_login():
     username = login_field.get()
     password = password_field.get()
     status.configure(text="")
+    status.place(x=x(85), y=y(562))
     if username == "":
         status.configure(text="Username cannot be blank!")
         return
@@ -36,8 +48,8 @@ def create_login():
     found = False
     for acc in root.accountsdata.keys():
         if acc == username.lower():
-            if root.accountsdata[acc]["password"] == password:
-                dashboard(root.accountsdata[acc])
+            if root.accountsdata[acc]["pswd"] == password:
+                dashboard(root.accountsdata[acc], (login_field, password_field, submit_login, submit_create, status))
             else:
                 status.configure(text="Incorrect Password!", fg="#FF0000")
                 return
@@ -52,7 +64,6 @@ def cancelcreate(*args):
     password_field.place(x=x(95), y=y(490))
     submit_login.place(x=x(85), y=y(600))
     submit_create.place(x=x(300), y=y(600))
-    status.place(x=x(85), y=y(562))
     for i in args:
         i.place_forget()
 
@@ -61,7 +72,7 @@ def cancelcreate(*args):
     root.bgimg = ImageTk.PhotoImage(dashbg)
     bg_canvas.itemconfig(root.rootbgimage, image=root.bgimg)
 
-def finalsubmit(fname, lname, email, age, pan, gender, aadhar, add1, add2, pswd, cpswd):
+def finalsubmit(fname, lname, email, age, pan, gender, aadhar, add1, add2, pswd, cpswd, **kwargs):
     g_fname = fname.get().replace(" ", "")
     g_lname = lname.get().replace(" ", "")
     g_email = email.get().replace(" ", "")
@@ -116,6 +127,13 @@ def finalsubmit(fname, lname, email, age, pan, gender, aadhar, add1, add2, pswd,
         create_popup("Passwords do not match!")
         return
 
+    userid = random.randint(10 ** 10, 10 ** 11)
+    root.accountsdata[str(userid)] = {"pswd": g_pswd, "email": g_email, "address": f"{g_add1}, {g_add2}", "age": g_age, "gender": g_gender,
+                                      "pan": g_pan, "aadhar": g_aadhar, "name":f"{g_fname} {g_lname}"}
+    root.data[str(userid)] = {"balance":0}
+    savedata()
+    dashboard(root.accountsdata[str(userid)], kwargs["ele"])
+
 def create_popup(text):
     messagebox.showwarning("Error", text)
 
@@ -128,6 +146,7 @@ def submit_data():
 
     dashbg = Image.open("data/images/create_account.png")
     dashbg = dashbg.resize(root.wm_maxsize())
+
     root.bgimg = ImageTk.PhotoImage(dashbg)
     bg_canvas.itemconfig(root.rootbgimage, image=root.bgimg)
 
@@ -165,22 +184,8 @@ def submit_data():
     cancel.place(x=x(1290), y=y(690))
     cancel.configure(command=partial(cancelcreate, fname, lname, email, age, pan, male, female, other, aadhar, add1, add2, pswd,
                         cpswd, final, cancel))
-    final.configure(command=partial(finalsubmit, fname, lname, email, age, pan, gender, aadhar, add1, add2, pswd, cpswd))
-    return
-    usen = input('Pls enter a username: ')
-    pas = input('Pls enter a password: ')
-    email = input('Pls enter your email: ')
-    add = input('Pls enter your address: ')
-    age = int(input('Pls enter your age: '))
-    gn = input('Pls enter your gender: ')
-    mno= input('Pls enter your mobile number: ')
-    pan= input('Pls enter your pan number: ')
-    acn = input('Pls enter your aadhar card number: ')
-
-    userid = random.randint(10**10, 10**11)
-    root.accountsdata[str(userid)] = {"password":pas, "email":email, "address":add, "age":age, "Gender":gn, "MOBILE NUMBER": mno, "PAN NO.":pan, "AADHAR CARD NO.":acn}
-    with open('data/accounts.json', 'w') as file:
-        file.write(root.accountsdata)
+    final.configure(command=partial(finalsubmit, fname, lname, email, age, pan, gender, aadhar, add1, add2, pswd, cpswd,
+                                    ele=(fname, lname, email, age, pan, male, female, other, aadhar, add1, add2, pswd, cpswd, final, cancel)))
 
 def restore_root():
     if root.fs:
@@ -196,12 +201,10 @@ def restore_root():
         restore.place(x=x(root.x - x(93)), y=y(2))
         close.place(x=x(root.x - x(42)), y=y(2))
 
-def dashboard(data):
-    login_field.place_forget()
-    password_field.place_forget()
-    submit_login.place_forget()
-    submit_create.place_forget()
-    status.place_forget()
+def dashboard(data, *args):
+    for i in args[0]:
+        i.place_forget()
+
     dashbg = Image.open("data/images/dashboard.png")
     dashbg = dashbg.resize(root.wm_maxsize())
     root.bgimg = ImageTk.PhotoImage(dashbg)
@@ -212,14 +215,56 @@ def dashboard(data):
     topframe = Frame(root, width=root.wm_maxsize()[0], height=80, bg="#B576FF")
     topframe.place(x=0, y=y(25))
 
-    userimg = Image.open("data/images/user.png").resize((x(40), y(40)))
+    userimg = Image.open("data/images/user.png").resize((x(40), y(40))).convert("RGB")
     userimg = ImageTk.PhotoImage(userimg)
-    userimage = Canvas(root, width=x(50), height=y(50))
-    userimage.create_image(0, 0, image=userimg, anchor="nw")
-    userimage.place(x=x(25), y=y(40))
+    userimage = Label(root, image=userimg)
+    userimage.image = userimg
+    userimage.place(x=x(27), y=y(40))
 
     welcome = Label(topframe, text=f"Welcome, {data['name']}!", font=("Arial", 20), bg="#B576FF")
     welcome.place(x=x(85), y=(20))
+
+    depimg = Image.open("data/images/deposit.PNG").resize((x(100), y(100)))
+    depimg = ImageTk.PhotoImage(depimg)
+    depositbtn = Button(root, text="Deposit", compound=TOP, image=depimg, font=("Arial", 13, "bold"))
+    depositbtn.place(x=x(800), y=y(300))
+    depositbtn.image = depimg
+
+    withimg = Image.open("data/images/withdraw.png").resize((x(100), y(100)))
+    withimg = ImageTk.PhotoImage(withimg)
+    withbtn = Button(root, text="Withdraw", compound=TOP, image=withimg, font=("Arial", 13, "bold"))
+    withbtn.place(x=x(940), y=y(300))
+    withbtn.image = withimg
+
+    loanimg = Image.open("data/images/loan.jpg").resize((x(100), y(100)))
+    loanimg = ImageTk.PhotoImage(loanimg)
+    loanbtn = Button(root, text="Loan", compound=TOP, image=loanimg, font=("Arial", 13, "bold"))
+    loanbtn.place(x=x(1080), y=y(300))
+    loanbtn.image = loanimg
+
+    statementsimg = Image.open("data/images/statements.png").resize((x(100), y(100)))
+    statementsimg = ImageTk.PhotoImage(statementsimg)
+    statementsbtn = Button(root, text="Statement", compound=TOP, image=statementsimg, font=("Arial", 13, "bold"))
+    statementsbtn.place(x=x(1220), y=y(300))
+    statementsbtn.image = statementsimg
+
+    viewaccimg = Image.open("data/images/viewacc.png").resize((x(100), y(100)))
+    viewaccimg = ImageTk.PhotoImage(viewaccimg)
+    viewaccbtn = Button(root, text="My Account", compound=TOP, image=viewaccimg, font=("Arial", 13, "bold"))
+    viewaccbtn.place(x=x(800), y=y(460))
+    viewaccbtn.image = viewaccimg
+
+    fdimg = Image.open("data/images/fixeddep.png").resize((x(100), y(100)))
+    fdimg = ImageTk.PhotoImage(fdimg)
+    fdbtn = Button(root, text="Fixed Dep", compound=TOP, image=fdimg, font=("Arial", 13, "bold"))
+    fdbtn.place(x=x(940), y=y(460))
+    fdbtn.image = fdimg
+
+    chpswdimg = Image.open("data/images/passwd.png").resize((x(100), y(100)))
+    chpswdimg = ImageTk.PhotoImage(chpswdimg)
+    chpswdbtn = Button(root, text="Change Pswd", compound=TOP, image=chpswdimg, font=("Arial", 13, "bold"))
+    chpswdbtn.place(x=x(1080), y=y(460))
+    chpswdbtn.image = chpswdimg
 
 root = Tk()
 root.geometry(f"{root.wm_maxsize()[0]}x{root.wm_maxsize()[1]}")
@@ -256,7 +301,6 @@ submit_create = Button(root, text="Create Account", font=("Arial", 18), width=x(
 submit_create.place(x=x(300), y=y(600))
 
 status = Label(root, font=("Helvetica", 16), bg="#ffffff", fg="#FF0000")
-status.place(x=x(85), y=y(562))
 
 with open("data/accounts.json", "r") as f:
     root.accountsdata = json.load(f)
@@ -275,7 +319,7 @@ def createstatements(CREDIT, balance):
 
     prev.append({"type": withdraw(), "Withdraw": nam})
     prev.append({"type": deposit(), "Deposit": n_balance})
-    savecode()
+    savedata()
 
 
 def withdraw():
@@ -288,12 +332,7 @@ def withdraw():
     else:
         nam = balance - withd
         root.data[str(userid)] = {"balance":nam}
-        savecode()
-
-def savecode():
-    with open('data/data.json', 'w') as file:
-        file.write(json.dumps(root.data, indent=2))
-
+        savedata()
 
 def deposit():
     userid = 8567375658
@@ -305,13 +344,9 @@ def deposit():
         n_balance = dep + balance
         print("THE AMOUNT HAS BEEN DEPOSITED YOUR NEW CURRENT BALANCE IS",n_balance)
         root.data[str(userid)] = {"balance": n_balance}
-        savecode()
+        savedata()
     elif dep > alloted :
         print("THE AMOUNT YOU WANT TO DEPOSIT IS LARGER THAN ALLOWED PLEASE REFER TO OUR TERMS AND CONDITIONS FOR FURTHER INFORMATION")
-
-
-with open('data/data.json', 'w') as file:
-    file.write(json.dumps(root.data,indent=2))
 
 def loan():
     userid = 8567375658
@@ -334,6 +369,6 @@ def loan():
     else :
         print("NOT CONFIRMED BECAUSE THE AMOUNT EXPECTED IS TOO LARGE")
 
-
+dashboard(root.accountsdata["58625216057"], (login_field, password_field, submit_login, submit_create, status))
 root.mainloop()
 
