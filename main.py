@@ -96,37 +96,37 @@ def finalsubmit(fname, lname, email, age, pan, gender, aadhar, add1, add2, pswd,
 
     if any([g_fname == "", g_lname == "", g_email == "", g_age == "", g_pan == "", g_gender == "", g_aadhar == "",
             g_add1 == "", g_add2 == "", g_pswd == "", g_cpswd == ""]):
-        create_popup("Please make sure all the fields are filled!")
+        create_popup(0, "Please make sure all the fields are filled!")
         return
 
     if (not namecheck.search(g_fname)) or (not namecheck.search(g_lname)):
-        create_popup("Invalid Name! Use of only alphabets is allowed")
+        create_popup(0, "Invalid Name! Use of only alphabets is allowed")
         return
 
     if ("@" not in g_email) or ("." not in g_email):
-        create_popup("Invalid mail id! Please re-check")
+        create_popup(0, "Invalid mail id! Please re-check")
         return
 
     try: g_age = int(g_age)
     except:
-        create_popup("Age must be numeric only!")
+        create_popup(0, "Age must be numeric only!")
         return
 
     if (len(g_pan) != 10) or (not pancheck.search(g_pan)):
-        create_popup("Invalid PAN number!")
+        create_popup(0, "Invalid PAN number!")
         return
 
     if len(g_aadhar) != 12:
-        create_popup("Invalid Aadhar number!")
+        create_popup(0, "Invalid Aadhar number!")
         return
 
     try: g_aadhar = int(g_aadhar)
     except:
-        create_popup("Invalid Aadhar number!")
+        create_popup(0, "Invalid Aadhar number!")
         return
 
     if not pswdcheck.search(g_pswd):
-        create_popup("Password should meet following criteria:\n"
+        create_popup(0, "Password should meet following criteria:\n"
                      "- Minimum 8 characters\n"
                      "- Must contain 1 uppercase letter\n"
                      "- Must contain 1 lowercase letter\n"
@@ -135,7 +135,7 @@ def finalsubmit(fname, lname, email, age, pan, gender, aadhar, add1, add2, pswd,
         return
 
     if g_cpswd != g_pswd:
-        create_popup("Passwords do not match!")
+        create_popup(0, "Passwords do not match!")
         return
 
     userid = random.randint(10 ** 10, 10 ** 11)
@@ -145,8 +145,11 @@ def finalsubmit(fname, lname, email, age, pan, gender, aadhar, add1, add2, pswd,
     savedata()
     dashboard(root.accountsdata[str(userid)], kwargs["ele"])
 
-def create_popup(text):
-    messagebox.showwarning("Error", text)
+def create_popup(pt, text):
+    if pt == 0:
+        messagebox.showerror("Error", text)
+    else:
+        messagebox.showinfo("Success", text)
 
 def submit_data():
     login_field.place_forget()
@@ -245,13 +248,15 @@ def dashboard(data, *args):
 
     depimg = Image.open("data/images/deposit.PNG").resize((x(150), y(150)))
     depimg = ImageTk.PhotoImage(depimg)
-    depositbtn = Button(root, text="Deposit", compound=TOP, image=depimg, font=("Arial", 13, "bold"), bg="white")
+    depositbtn = Button(root, text="Deposit", compound=TOP, image=depimg, font=("Arial", 13, "bold"), bg="white",
+                        command=partial(deposit, data["id"]))
     depositbtn.place(x=x(400), y=y(300))
     depositbtn.image = depimg
 
     withimg = Image.open("data/images/withdraw.png").resize((x(150), y(150)))
     withimg = ImageTk.PhotoImage(withimg)
-    withbtn = Button(root, text="Withdraw", compound=TOP, image=withimg, font=("Arial", 13, "bold"), bg="white")
+    withbtn = Button(root, text="Withdraw", compound=TOP, image=withimg, font=("Arial", 13, "bold"), bg="white",
+                     command=partial(withdraw, data["id"]))
     withbtn.place(x=x(600), y=y(300))
     withbtn.image = withimg
 
@@ -293,31 +298,128 @@ def dashboard(data, *args):
     logoutbtn.configure(command=partial(showhomepage, userimage, welcome, yourdash, depositbtn, withbtn, loanbtn,
                                        statementsbtn, viewaccbtn, fdbtn, chpswdbtn, logoutbtn, topframe))
 
-def withdraw():
-    userid = 8567375658
+def withdraw(userid):
+    picon = ImageTk.PhotoImage(Image.open("data/images/withdraw_icon.png"))
+    popup = Toplevel(root)
+    popup.iconphoto(False, picon)
+    popup.grab_set()
+    popup.resizable(0, 0)
+    a0 = int(root.wm_maxsize()[0])
+    a1 = int(root.wm_maxsize()[1])
+    popup.geometry(f"{int(a0/3)}x{int(a1/3)}+{int(a0/3)}+{int(a1/3)}")
+    popup.configure(bg="white")
+    popup.title("Directrix- Withdraw Money")
+    popup.focus_set()
+
+    witht = Label(popup, text="Withdraw Money", font=("Arial", 30, "bold", "underline"), bg="white")
+    witht.place(x=x(115), y=y(5))
+
+    curbal = Label(popup, text="Your current balance is:", font=("Arial", 22), bg="white")
+    curbal.place(x=x(15), y=y(70))
+
     var = root.data.get(str(userid))
     balance = var.get('balance')
-    withd = int(input('Please enter the amount you want to withdraw = '))
+
+    bal = Label(popup, text=f"{balance} INR", font=("Calibri", 22, "bold"), bg="white")
+    bal.place(x=x(325), y=y(69))
+
+    lab = Label(popup, text="Enter Amount:", font=("Arial", 22), bg="white")
+    lab.place(x=x(15), y=y(125))
+    ent = Entry(popup, font=("Arial", 22), bg="white", width=x(15))
+    ent.place(x=x(210), y=y(127))
+
+    lab2 = Label(popup, text="Reason (Opt):", font=("Arial", 22), bg="white")
+    lab2.place(x=x(15), y=y(165))
+    txt = Text(popup, font=("Calibri", 20), bg="white", width=x(17), height=y(2))
+    txt.place(x=x(210), y=y(167))
+
+    btn = Button(popup, text="Withdraw", font=("Arial", 15), bg="#FFCF61",
+                 command=partial(withdraw_process, userid, ent, txt, balance, popup))
+    btn.place(x=x(140), y=y(240))
+    btn2 = Button(popup, text=" Cancel ", font=("Arial", 15), bg="#FF5959", command=popup.destroy)
+    btn2.place(x=x(250), y=y(240))
+
+def withdraw_process(userid, ent, txt, balance, popup):
+    withd = ent.get().replace(" ", "")
+    reason = txt.get("0.0", END)
+    if withd == "":
+        create_popup(0, "Amount cannot be empty")
+        return
+    try: withd = int(withd)
+    except:
+        create_popup(0, "The amount should be numbers only!")
+        return
     if withd > balance:
-        print('!!! Insufficient Balance !!!')
+        create_popup(0, 'Insufficient Balance')
+    elif withd == 0:
+        create_popup(0, 'Cannot withdraw 0 money')
     else:
         nam = balance - withd
         root.data[str(userid)] = {"balance":nam}
         savedata()
+        popup.destroy()
+        create_popup(1, "Withdraw Successful!")
 
-def deposit():
-    userid = 8567375658
+def deposit(userid):
+    picon = ImageTk.PhotoImage(Image.open("data/images/deposit_icon.png"))
+    popup = Toplevel(root)
+    popup.iconphoto(False, picon)
+    popup.grab_set()
+    popup.resizable(0, 0)
+    a0 = int(root.wm_maxsize()[0])
+    a1 = int(root.wm_maxsize()[1])
+    popup.geometry(f"{int(a0 / 3)}x{int(a1 / 3)}+{int(a0 / 3)}+{int(a1 / 3)}")
+    popup.configure(bg="white")
+    popup.title("Directrix- Deposit Money")
+    popup.focus_set()
+
+    witht = Label(popup, text="Deposit Money", font=("Arial", 30, "bold", "underline"), bg="white")
+    witht.place(x=x(115), y=y(5))
+
+    curbal = Label(popup, text="Your current balance is:", font=("Arial", 22), bg="white")
+    curbal.place(x=x(15), y=y(70))
+
     var = root.data.get(str(userid))
     balance = var.get('balance')
-    dep = int(input("AMOUNT"))
-    alloted = balance*(.25)
+
+    bal = Label(popup, text=f"{balance} INR", font=("Calibri", 22, "bold"), bg="white")
+    bal.place(x=x(325), y=y(69))
+
+    lab = Label(popup, text="Enter Amount:", font=("Arial", 22), bg="white")
+    lab.place(x=x(15), y=y(125))
+    ent = Entry(popup, font=("Arial", 22), bg="white", width=x(15))
+    ent.place(x=x(210), y=y(127))
+
+    lab2 = Label(popup, text="Reason (Opt):", font=("Arial", 22), bg="white")
+    lab2.place(x=x(15), y=y(165))
+    txt = Text(popup, font=("Calibri", 20), bg="white", width=x(17), height=y(2))
+    txt.place(x=x(210), y=y(167))
+
+    btn = Button(popup, text="Deposit", font=("Arial", 15), bg="#FFCF61",
+                 command=partial(deposit_process, userid, ent, txt, balance, popup))
+    btn.place(x=x(150), y=y(240))
+    btn2 = Button(popup, text=" Cancel ", font=("Arial", 15), bg="#FF5959", command=popup.destroy)
+    btn2.place(x=x(240), y=y(240))
+
+def deposit_process(userid, ent, txt, balance, popup):
+    dep = ent.get().replace(" ", "")
+    reason = txt.get("0.0", END)
+    if dep == "":
+        create_popup(0, "Amount cannot be empty")
+        return
+    try: dep = int(dep)
+    except:
+        create_popup(0, "The amount should be numbers only!")
+        return
+    alloted = balance*0.25
     if dep < alloted:
         n_balance = dep + balance
-        print("THE AMOUNT HAS BEEN DEPOSITED YOUR NEW CURRENT BALANCE IS",n_balance)
+        create_popup(1, f"The amount is successfully deposited")
         root.data[str(userid)] = {"balance": n_balance}
         savedata()
+
     elif dep > alloted :
-        print("THE AMOUNT YOU WANT TO DEPOSIT IS LARGER THAN ALLOWED PLEASE REFER TO OUR TERMS AND CONDITIONS FOR FURTHER INFORMATION")
+        create_popup(0, "The amount you want to deposit is larger than allowed.\nPlease refer to out TnC for further information")
 
 def loan():
     userid = 8567375658
@@ -348,8 +450,10 @@ def createstatements(userid, amount, t):
     prev = root.statements.get(str(userid), [])
     prev.append({"type": t, "amt": amount})
     savedata()
-
+    
 root = Tk()
+root.resizable(0, 0)
+root.title("Directrix Bank")
 root.geometry(f"{root.wm_maxsize()[0]}x{root.wm_maxsize()[1]}")
 root.x = root.wm_maxsize()[0]
 root.y = root.wm_maxsize()[1]
