@@ -1,7 +1,6 @@
 # Directric Bank
 # Refer README.md for features and contributions
 
-#create acc- random.randint(10**9, 10**10)
 import random
 import time, json, re
 from tkinter import *
@@ -351,8 +350,13 @@ def withdraw_process(userid, ent, txt, balance, popup):
         return
     if withd > balance:
         create_popup(0, 'Insufficient Balance')
+        return
     elif withd == 0:
         create_popup(0, 'Cannot withdraw 0 money')
+        return
+    elif withd < 0:
+        create_popup(0, "The amount cannot be negative")
+        return
     else:
         nam = balance - withd
         root.data[str(userid)] = {"balance":nam}
@@ -411,6 +415,12 @@ def deposit_process(userid, ent, txt, balance, popup):
     except:
         create_popup(0, "The amount should be numbers only!")
         return
+    if dep == 0:
+        create_popup(0, 'Cannot deposit 0 money')
+        return
+    elif dep < 0:
+        create_popup(0, "The amount cannot be negative")
+        return
     alloted = 100000
     if dep > alloted:
         create_popup(0, "The amount you want to deposit is larger than allowed.\nPlease refer to out TnC for further information")
@@ -448,9 +458,10 @@ def cacheupdate():
         f.write(json.dumps(root.cache, indent=2))
 
 def createstatements(userid, amount, t, reason):
-    if reason == "": reason = "N.A."
+    if reason == "\n": reason = "N.A."
     prev = root.statements.get(str(userid), [])
-    prev.append({"type": t, "amt": amount, "r":reason})
+    prev.append({"type": t, "amt": amount, "r":reason.replace("\n", "")})
+    root.statements[str(userid)] = prev
     savedata()
     
 root = Tk()
@@ -515,4 +526,3 @@ if root.cache.get("skip", False):
     dashboard(root.accountsdata[str(cacheid)], (login_field, password_field, submit_login, submit_create, status))
 
 root.mainloop()
-

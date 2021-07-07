@@ -9,5 +9,27 @@
     "aadhar": 123456789123,
     "name": "Samaksh Gupta",
     "id": "58625216057"
+  },
+  "56790311881": {
+    "pswd": "ABC@123ahaan",
+    "email": "ahaan@gmail.com",
+    "address": "Sanjay Nagar, Ghaziabad",
+    "age": 19,
+    "gender": "M",
+    "pan": "1234567890",
+    "aadhar": 123456789012,
+    "name": "Ahaan Parashar",
+    "id": "56790311881"
+  },
+  "35834643982": {
+    "pswd": "ABC@123vatsal",
+    "email": "ad@gmail.com",
+    "address": "rajnagar ext, gzb",
+    "age": 19,
+    "gender": "M",
+    "pan": "1234567890",
+    "aadhar": 123456789012,
+    "name": "Vatsal Saxena",
+    "id": "35834643982"
   }
 }
