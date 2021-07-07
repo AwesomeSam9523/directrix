@@ -356,7 +356,7 @@ def withdraw_process(userid, ent, txt, balance, popup):
     else:
         nam = balance - withd
         root.data[str(userid)] = {"balance":nam}
-        savedata()
+        createstatements(userid, withd, "D", reason)
         popup.destroy()
         create_popup(1, "Withdraw Successful!")
 
@@ -411,15 +411,16 @@ def deposit_process(userid, ent, txt, balance, popup):
     except:
         create_popup(0, "The amount should be numbers only!")
         return
-    alloted = balance*0.25
-    if dep < alloted:
-        n_balance = dep + balance
-        create_popup(1, f"The amount is successfully deposited")
-        root.data[str(userid)] = {"balance": n_balance}
-        savedata()
-
-    elif dep > alloted :
+    alloted = 100000
+    if dep > alloted:
         create_popup(0, "The amount you want to deposit is larger than allowed.\nPlease refer to out TnC for further information")
+        return
+
+    n_balance = dep + balance
+    root.data[str(userid)] = {"balance": n_balance}
+    createstatements(userid, dep, "C", reason)
+    popup.destroy()
+    create_popup(1, f"The amount is successfully deposited")
 
 def loan():
     userid = 8567375658
@@ -446,9 +447,10 @@ def cacheupdate():
     with open("data/cache.json", "w") as f:
         f.write(json.dumps(root.cache, indent=2))
 
-def createstatements(userid, amount, t):
+def createstatements(userid, amount, t, reason):
+    if reason == "": reason = "N.A."
     prev = root.statements.get(str(userid), [])
-    prev.append({"type": t, "amt": amount})
+    prev.append({"type": t, "amt": amount, "r":reason})
     savedata()
     
 root = Tk()
