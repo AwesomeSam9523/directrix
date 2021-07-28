@@ -436,22 +436,73 @@ def loan():
     userid = 8567375658
     var = root.data.get(str(userid))
     balance = var.get('balance')
-    exp = int(input("AMOUNT EXPECTED:"))
+    exp = int(input(" EXPECTED AMOUNT:"))
+    if exp == " ":
+        create_popup(0, "Amount cannot be empty")
+        return
+    if exp == 0:
+        create_popup(0, "Amount cannot be 0")
+        return
+    if exp < 0:
+        create_popup(0, "Amount cannot be negative")
+        return
     inc = int(input("ANNUAL INCOME:"))
-    credit_score = int(input("CREDIT SCORE:"))
-    if credit_score < 700 :
+    if inc == "":
+        create_popup(0, "Amount cannot be empty")
+        return
+    if inc == 0:
+        create_popup(0, "Amount cannot be 0")
+        return
+    if inc < 0:
+        create_popup(0, "Amount cannot be negative")
+        return
+    c_s = int(input("CREDIT SCORE:"))
+    if c_s == " ":
+        create_popup(0, "detail cannot be empty")
+        return
+    if  c_s == 0:
+        create_popup(0, "detail cannot be 0")
+        return
+    if c_s < 0:
+        create_popup(0, "deatil cannot be negative")
+        return
+    if c_s < 700 :
         print("NOT ELIGIBLE BECAUSE YOUR CREDIT SCORE IS LESS")
     else :
         print("ELIGIBLE")
     job     = input("YOUR OCCUPATION")
+    if job == " ":
+        create_popup(0, "detail cannot be empty")
+        return
     reason  = input("PURPOSE")
-    by_when = input("BY WHEN DO YOU REQUIRE THE AMOUNT:")
+    if  reason == " ":
+        create_popup(0, "detail cannot be empty")
+        return
+    by_when = input("BY WHEN DO YOU REQUIRE THE AMOUNT :")
+    if by_when == " ":
+        create_popup(0, "detail cannot be empty")
+        return
+    till_when = input("TILL WHEN WILL YOU KEEP THE AMOUNT(MONTHS) :")
+    if till_when == " ":
+        create_popup(0, "detail cannot be empty")
+        return
+
     confirm_c = (inc/12)*(0.25)
-    interet = (exp*(0.25))/24
-    if confirm_c*(0.20) > interet:
-        print("CONFIRMED")
+    interest = (exp*(0.25))/12
+    amount = (exp*(0.3))/till_when
+    if confirm_c*(0.20) > interest:
+        print("ELIGIBLE")
+        print("AMOUNT=",amount,"RATE",0.3,)
+        confirmation = input("IF YOU WANNA CONFIRM PRESS 'Y' ELSE 'N' :")
+        if confirmation == "Y":
+            create_popup(1, "LOAN HAS BEEN CONFIRMED")
+            return
+        if confirmation == "N":
+            create_popup(0, "CANCELLED")
+            return
+
     else :
-        print("NOT CONFIRMED BECAUSE THE AMOUNT EXPECTED IS TOO LARGE")
+        print("NOT ELIGIBLE BECAUSE THE AMOUNT EXPECTED IS TOO LARGE")
 
 def cacheupdate():
     with open("data/cache.json", "w") as f:
@@ -525,4 +576,4 @@ cacheupdate()
 if root.cache.get("skip", False):
     dashboard(root.accountsdata[str(cacheid)], (login_field, password_field, submit_login, submit_create, status))
 
-root.mainloop()
+root.loan()
