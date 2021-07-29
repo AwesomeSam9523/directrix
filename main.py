@@ -457,10 +457,10 @@ def loan():
         create_popup(0, "Amount cannot be negative")
         return
     c_s = int(input("CREDIT SCORE:"))
-    if c_s == " ":
+    if credit_score == " ":
         create_popup(0, "detail cannot be empty")
         return
-    if  c_s == 0:
+    if  credit_score == 0:
         create_popup(0, "detail cannot be 0")
         return
     if c_s < 0:
@@ -475,11 +475,11 @@ def loan():
         create_popup(0, "detail cannot be empty")
         return
     reason  = input("PURPOSE")
-    if  reason == " ":
+    if  reason == "":
         create_popup(0, "detail cannot be empty")
         return
     by_when = input("BY WHEN DO YOU REQUIRE THE AMOUNT :")
-    if by_when == " ":
+    if by_when == "":
         create_popup(0, "detail cannot be empty")
         return
     till_when = input("TILL WHEN WILL YOU KEEP THE AMOUNT(MONTHS) :")
@@ -576,4 +576,4 @@ cacheupdate()
 if root.cache.get("skip", False):
     dashboard(root.accountsdata[str(cacheid)], (login_field, password_field, submit_login, submit_create, status))
 
-root.loan()
+root.mainloop()
