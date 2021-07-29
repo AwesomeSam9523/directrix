@@ -432,6 +432,24 @@ def deposit_process(userid, ent, txt, balance, popup):
     popup.destroy()
     create_popup(1, f"The amount is successfully deposited")
 
+def fdp():
+    userid=58625216057
+
+fd_plans =[
+    {"amt":25000, "time":12, "rate":5.75, "payout":1561, "mat":26561},
+    {"amt":25000, "time":24, "rate":6.20, "payout":3196, "mat":28196},
+    {"amt":25000, "time":36, "rate":6.60, "payout":5284, "mat":30284},
+    {"amt":50000, "time":12, "rate":5.75, "payout":2875, "mat":52875},
+    {"amt":50000, "time":24, "rate":6.20, "payout":6392, "mat":56392},
+    {"amt":50000, "time":36, "rate":6.60, "payout":10568, "mat":60568},
+    {"amt":100000, "time":12, "rate":5.75, "payout":5750, "mat":105750},
+    {"amt":100000, "time":24, "rate":6.20, "payout":12784, "mat":112784},
+    {"amt":100000, "time":36, "rate":6.60, "payout":21136, "mat":121136},
+
+
+]
+
+
 def loan():
     userid = 8567375658
     var = root.data.get(str(userid))
@@ -503,6 +521,7 @@ def loan():
 
     else :
         print("NOT ELIGIBLE BECAUSE THE AMOUNT EXPECTED IS TOO LARGE")
+
 
 def cacheupdate():
     with open("data/cache.json", "w") as f:
@@ -576,4 +595,4 @@ cacheupdate()
 if root.cache.get("skip", False):
     dashboard(root.accountsdata[str(cacheid)], (login_field, password_field, submit_login, submit_create, status))
 
-root.loan()
+root.mainloop()
