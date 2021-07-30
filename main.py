@@ -125,6 +125,10 @@ def finalsubmit(fname, lname, email, age, pan, gender, aadhar, add1, add2, pswd,
         create_popup(0, "Invalid Aadhar number!")
         return
 
+    if " " in g_pswd:
+        create_popup(0, "Password cannot contain a space!")
+        return
+
     if not pswdcheck.search(g_pswd):
         create_popup(0, "Password should meet following criteria:\n"
                      "- Minimum 8 characters\n"
@@ -146,7 +150,6 @@ def finalsubmit(fname, lname, email, age, pan, gender, aadhar, add1, add2, pswd,
     dashboard(root.accountsdata[str(userid)], kwargs["ele"])
 
 def create_popup(pt, text):
-    return print(text)
     if pt == 0:
         messagebox.showerror("Error", text)
     else:
@@ -288,7 +291,8 @@ def dashboard(data, *args):
 
     chpswdimg = Image.open("data/images/passwd.png").resize((x(150), y(150)))
     chpswdimg = ImageTk.PhotoImage(chpswdimg)
-    chpswdbtn = Button(root, text="Change Pswd.", compound=TOP, image=chpswdimg, font=("Arial", x(13), "bold"), bg="white")
+    chpswdbtn = Button(root, text="Change Pswd.", compound=TOP, image=chpswdimg, font=("Arial", x(13), "bold"), bg="white",
+                       command=changepass)
     chpswdbtn.place(x=x(800), y=y(520))
     chpswdbtn.image = chpswdimg
 
@@ -570,34 +574,63 @@ def changepass():
     userid = 58625216057
 
     chp = Label(popup, text="Change Password", font=("Arial", x(30), "bold", "underline"), bg="white")
-    chp.place(x=x(115), y=y(5))
+    chp.place(x=x(80), y=y(5))
 
-    chp = Label(popup, text="Change Password", font=("Arial", x(30), "bold", "underline"), bg="white")
-    chp.place(x=x(115), y=y(5))
-    cur = Entry(popup, font=("Arial", x(22)), bg="white")
-    cur.place(x=x(15), y=y(70))
+    chp = Label(popup, text="Current Pass:", font=("Arial", x(20)), bg="white")
+    chp.place(x=x(10), y=y(70))
+    cur = Entry(popup, font=("Arial", x(18)), bg="white", show="*")
+    cur.place(x=x(190), y=y(74))
 
-    var = root.data.get(str(userid))
-    balance = var.get('balance')
+    newp = Label(popup, text=f"New Pass:", font=("Arial", x(20)), bg="white")
+    newp.place(x=x(10), y=y(140))
+    new = Entry(popup, font=("Arial", x(18)), bg="white", show="*")
+    new.place(x=x(190), y=y(140))
 
-    bal = Label(popup, text=f"{balance} INR", font=("Calibri", x(22), "bold"), bg="white")
-    bal.place(x=x(325), y=y(69))
+    conp = Label(popup, text="Confirm Pass:", font=("Arial", x(20)), bg="white")
+    conp.place(x=x(10), y=y(180))
+    con = Entry(popup, font=("Arial", x(18)), bg="white", show="*")
+    con.place(x=x(190), y=y(180))
 
-    lab = Label(popup, text="Enter Amount:", font=("Arial", x(22)), bg="white")
-    lab.place(x=x(15), y=y(125))
-    ent = Entry(popup, font=("Arial", x(22)), bg="white", width=x(15))
-    ent.place(x=x(210), y=y(127))
-
-    lab2 = Label(popup, text="Reason (Opt):", font=("Arial", x(22)), bg="white")
-    lab2.place(x=x(15), y=y(165))
-    txt = Text(popup, font=("Calibri", 20), bg="white", width=x(17), height=y(2))
-    txt.place(x=x(210), y=y(167))
-
-    btn = Button(popup, text="Deposit", font=("Arial", x(15)), bg="#FFCF61",
-                 command=partial(deposit_process, userid, ent, txt, balance, popup))
+    btn = Button(popup, text="Change", font=("Arial", x(15)), bg="#FFCF61",
+                 command=partial(passprocess, userid, cur, new, con, popup))
     btn.place(x=x(150), y=y(240))
     btn2 = Button(popup, text=" Cancel ", font=("Arial", x(15)), bg="#FF5959", command=popup.destroy)
     btn2.place(x=x(240), y=y(240))
+
+def passprocess(userid, oldpass, newpass, confirmpass, popup):
+    userid = str(userid)
+    oldpass = oldpass.get().replace(" ", "")
+    newpass = newpass.get()
+    confirmpass = confirmpass.get()
+
+    if root.accountsdata[userid]["pswd"] != oldpass:
+        create_popup(0, "Current password is incorrect!")
+        return
+
+    if newpass == "":
+        create_popup(0, "New password cannot be empty!")
+        return
+
+    if " " in newpass:
+        create_popup(0, "Password cannot contain a space!")
+        return
+
+    if newpass != confirmpass:
+        create_popup(0, "New password and Confirm password do not match!")
+        return
+
+    if not pswdcheck.search(newpass):
+        create_popup(0, "Password should meet following criteria:\n"
+                     "- Minimum 8 characters\n"
+                     "- Must contain 1 uppercase letter\n"
+                     "- Must contain 1 lowercase letter\n"
+                     "- Must contain 1 symbol\n"
+                     "- Must contain 1 digit")
+        return
+    root.accountsdata[userid]["pswd"] = confirmpass
+    savedata()
+    create_popup(1, "Password changed successfully!")
+    popup.destroy()
 
 def createstatements(userid, amount, t, reason):
     if reason == "\n": reason = "N.A."
@@ -844,5 +877,4 @@ cacheupdate()
 if root.cache.get("skip", False):
     dashboard(root.accountsdata[str(cacheid)], (login_field, password_field, submit_login, submit_create, status))
 
-loan()
-#root.mainloop()
+root.mainloop()
