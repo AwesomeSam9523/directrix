@@ -146,6 +146,7 @@ def finalsubmit(fname, lname, email, age, pan, gender, aadhar, add1, add2, pswd,
     dashboard(root.accountsdata[str(userid)], kwargs["ele"])
 
 def create_popup(pt, text):
+    return print(text)
     if pt == 0:
         messagebox.showerror("Error", text)
     else:
@@ -471,7 +472,7 @@ def loan():
     if exp < 0:
         create_popup(0, "Amount cannot be negative")
         return
-    inc = int(input("ANNUAL INCOME:"))
+    inc = input("ANNUAL INCOME:")
     if inc == "":
         create_popup(0, "Amount cannot be empty")
     try:
@@ -485,15 +486,15 @@ def loan():
     if inc < 0:
         create_popup(0, "Amount cannot be negative")
         return
-    c_s = int(input("CREDIT SCORE:"))
+    c_s = input("CREDIT SCORE:")
     if c_s == "":
         create_popup(0, "detail cannot be empty")
     try:
-        c_s = int(c_s)
+        c_s = int(float(c_s))
     except:
         create_popup(0, "Amount is not integer")
         return
-    if  c_s == 0:
+    if c_s == 0:
         create_popup(0, "detail cannot be 0")
         return
     if c_s < 0:
@@ -501,10 +502,11 @@ def loan():
         return
     if c_s < 700 :
         print("NOT ELIGIBLE BECAUSE YOUR CREDIT SCORE IS LESS")
+        return
     else :
         print("ELIGIBLE")
     job = input("YOUR OCCUPATION:")
-    if job == " ":
+    if job == "":
         create_popup(0, "detail cannot be empty")
         return
     reason  = input("PURPOSE:")
@@ -515,9 +517,14 @@ def loan():
     if by_when == "":
         create_popup(0, "detail cannot be empty")
         return
-    till_when = int(input("TILL WHEN WILL YOU KEEP THE AMOUNT(MONTHS) :"))
+    till_when = input("TILL WHEN WILL YOU KEEP THE AMOUNT(MONTHS) :")
     if till_when == "":
         create_popup(0, "detail cannot be empty")
+        return
+    try:
+        till_when = int(till_when)
+    except:
+        create_popup(0, "Detail must be integer")
         return
 
     rate = .03
@@ -535,9 +542,8 @@ def loan():
         if confirmation == "N":
             create_popup(0, "CANCELLED")
             return
-
     else :
-        print("NOT ELIGIBLE BECAUSE THE AMOUNT EXPECTED IS TOO LARGE")
+        create_popup(0, "NOT ELIGIBLE BECAUSE THE AMOUNT EXPECTED IS TOO LARGE")
 
 
 def cacheupdate():
@@ -788,5 +794,6 @@ cacheupdate()
 
 if root.cache.get("skip", False):
     dashboard(root.accountsdata[str(cacheid)], (login_field, password_field, submit_login, submit_create, status))
+
 loan()
-#root.mainloop
+#root.mainloop()
