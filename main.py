@@ -7,7 +7,7 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageFont, ImageDraw, ImageTk
 from functools import partial
-#fromprettytableimportPrettyTable
+from prettytable import PrettyTable
 
 namecheck = re.compile('^[a-z]+$', re.IGNORECASE)
 pancheck = re.compile('^[a-z0-9]+$', re.IGNORECASE)
@@ -472,7 +472,7 @@ def loan():
     if exp < 0:
         create_popup(0, "Amount cannot be negative")
         return
-    if exp > (10)**7 :
+    if exp >= (10)**7 :
         create_popup(0, "Amount is too large")
         return
     inc = input("ANNUAL INCOME:")
@@ -516,10 +516,7 @@ def loan():
     if  reason == "":
         create_popup(0, "detail cannot be empty")
         return
-    by_when = input("BY WHEN DO YOU REQUIRE THE AMOUNT :")
-    if by_when == "":
-        create_popup(0, "detail cannot be empty")
-        return
+
     till_when = input("TILL WHEN WILL YOU KEEP THE AMOUNT(MONTHS) :")
     if till_when == "":
         create_popup(0, "detail cannot be empty")
@@ -548,10 +545,59 @@ def loan():
     else :
         create_popup(0, "NOT ELIGIBLE BECAUSE THE AMOUNT EXPECTED IS TOO LARGE")
 
+def loan_process(userid, amount, time, job):
+    if userid in root.data:
+        #..
+        return
+    {"amt":amount, "time":time}
 
 def cacheupdate():
     with open("data/cache.json", "w") as f:
         f.write(json.dumps(root.cache, indent=2))
+
+def changepass():
+    picon = ImageTk.PhotoImage(Image.open("data/images/deposit_icon.png"))
+    popup = Toplevel(root)
+    popup.iconphoto(False, picon)
+    popup.grab_set()
+    popup.resizable(0, 0)
+    a0 = int(root.wm_maxsize()[0])
+    a1 = int(root.wm_maxsize()[1])
+    popup.geometry(f"{int(a0 / 3)}x{int(a1 / 3)}+{int(a0 / 3)}+{int(a1 / 3)}")
+    popup.configure(bg="white")
+    popup.title("Directrix- Change Password")
+    popup.focus_set()
+    userid = 58625216057
+
+    chp = Label(popup, text="Change Password", font=("Arial", x(30), "bold", "underline"), bg="white")
+    chp.place(x=x(115), y=y(5))
+
+    chp = Label(popup, text="Change Password", font=("Arial", x(30), "bold", "underline"), bg="white")
+    chp.place(x=x(115), y=y(5))
+    cur = Entry(popup, font=("Arial", x(22)), bg="white")
+    cur.place(x=x(15), y=y(70))
+
+    var = root.data.get(str(userid))
+    balance = var.get('balance')
+
+    bal = Label(popup, text=f"{balance} INR", font=("Calibri", x(22), "bold"), bg="white")
+    bal.place(x=x(325), y=y(69))
+
+    lab = Label(popup, text="Enter Amount:", font=("Arial", x(22)), bg="white")
+    lab.place(x=x(15), y=y(125))
+    ent = Entry(popup, font=("Arial", x(22)), bg="white", width=x(15))
+    ent.place(x=x(210), y=y(127))
+
+    lab2 = Label(popup, text="Reason (Opt):", font=("Arial", x(22)), bg="white")
+    lab2.place(x=x(15), y=y(165))
+    txt = Text(popup, font=("Calibri", 20), bg="white", width=x(17), height=y(2))
+    txt.place(x=x(210), y=y(167))
+
+    btn = Button(popup, text="Deposit", font=("Arial", x(15)), bg="#FFCF61",
+                 command=partial(deposit_process, userid, ent, txt, balance, popup))
+    btn.place(x=x(150), y=y(240))
+    btn2 = Button(popup, text=" Cancel ", font=("Arial", x(15)), bg="#FF5959", command=popup.destroy)
+    btn2.place(x=x(240), y=y(240))
 
 def createstatements(userid, amount, t, reason):
     if reason == "\n": reason = "N.A."
@@ -563,7 +609,7 @@ def createstatements(userid, amount, t, reason):
 class BankStatement:
     def __init__(self, userid:int, txt:Text):
         self.sort = False
-        #self.pt=PrettyTable()
+        self.pt=PrettyTable()
         self.pt.title = "Bank Statement(s)"
         self.pt.field_names = ["S.No.", "Type", "Amount", "Date & Time", "Reason"]
         self.userid = str(userid)
