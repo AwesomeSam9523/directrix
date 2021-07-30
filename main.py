@@ -2,12 +2,13 @@
 # Refer README.md for features and contributions
 
 import random, datetime
+import pytz
 import time, json, re
 from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageFont, ImageDraw, ImageTk
 from functools import partial
-#fromprettytableimportPrettyTable
+from prettytable import PrettyTable
 
 namecheck = re.compile('^[a-z]+$', re.IGNORECASE)
 pancheck = re.compile('^[a-z0-9]+$', re.IGNORECASE)
@@ -28,6 +29,9 @@ def savedata():
 
     with open('data/statements.json', 'w') as st:
         st.write(json.dumps(root.statements, indent=2))
+
+    with open('data/fd.json', 'w') as fd:
+        fd.write(json.dumps(root.fd, indent=2))
 
 def create_login():
     username = login_field.get()
@@ -435,23 +439,147 @@ def deposit_process(userid, ent, txt, balance, popup):
     popup.destroy()
     create_popup(1, f"The amount is successfully deposited")
 
-def fdp():
-    userid=58625216057
 
-fd_plans =[
-    {"amt":25000, "time":12, "rate":5.75, "payout":1561, "mat":26561},
-    {"amt":25000, "time":24, "rate":6.20, "payout":3196, "mat":28196},
-    {"amt":25000, "time":36, "rate":6.60, "payout":5284, "mat":30284},
-    {"amt":50000, "time":12, "rate":5.75, "payout":2875, "mat":52875},
-    {"amt":50000, "time":24, "rate":6.20, "payout":6392, "mat":56392},
-    {"amt":50000, "time":36, "rate":6.60, "payout":10568, "mat":60568},
-    {"amt":100000, "time":12, "rate":5.75, "payout":5750, "mat":105750},
-    {"amt":100000, "time":24, "rate":6.20, "payout":12784, "mat":112784},
-    {"amt":100000, "time":36, "rate":6.60, "payout":21136, "mat":121136},
-
-
+fd_plans = [
+    {"amt": 25000, "time": 12, "rate": 5.75, "payout": 1561, "mat": 26561},  # (0)
+    {"amt": 25000, "time": 24, "rate": 6.20, "payout": 3196, "mat": 28196},  # (1)
+    {"amt": 25000, "time": 36, "rate": 6.60, "payout": 5284, "mat": 30284},  # (2)
+    {"amt": 50000, "time": 12, "rate": 5.75, "payout": 2875, "mat": 52875},  # (3)
+    {"amt": 50000, "time": 24, "rate": 6.20, "payout": 6392, "mat": 56392},  # (4)
+    {"amt": 50000, "time": 36, "rate": 6.60, "payout": 10568, "mat": 60568},  # (5)
+    {"amt": 100000, "time": 12, "rate": 5.75, "payout": 5750, "mat": 105750},  # (6)
+    {"amt": 100000, "time": 24, "rate": 6.20, "payout": 12784, "mat": 112784},  # (7)
+    {"amt": 100000, "time": 36, "rate": 6.60, "payout": 21136, "mat": 121136},  # (8)
 ]
 
+
+def fdp():
+    userid = 56790311881
+    current_time = datetime.datetime.now(pytz.timezone('Asia/Kolkata'))
+    if str(userid) in root.fd.keys():
+        print("Respected Customer, You have already opted for a fixed deposit plan")
+        return
+    for i in fd_plans:
+        print("Investment amount:", i["amt"])
+        print("Investment Tenor(in months):", i["time"])
+        print("Interest Rate:", i["rate"])
+        print("Interest Payout:", i["payout"])
+        print("Maturity Amount:", i["mat"])
+        print(" ")
+    try:
+        usin = int(input("Please choose one of the above mentioned fixed deposit plans:"))
+        if usin == 1:
+            print("You have chosen the plan 1: \n"
+                  "Investment amount:₹25,000  \n"
+                  "Investment Tenor(in months):12 \n"
+                  "Interest Rate:5.75% \n"
+                  "Interest Payout:₹1,561 \n"
+                  "Maturity Amount:₹26,61 \n")
+            root.fd[str(userid)] = fd_plans[0]
+            savedata()
+
+
+        elif usin == 2:
+            print("You have chosen the plan 2: \n"
+                  "Investment amount:₹25,000  \n"
+                  "Investment Tenor(in months):24 \n"
+                  "Interest Rate:6.20% \n"
+                  "Interest Payout:₹3,196 \n"
+                  "Maturity Amount:₹28,196 \n")
+            root.fd[str(userid)] = fd_plans[1]
+            savedata()
+
+
+        elif usin == 3:
+            print("You have chosen the plan 3: \n"
+                  "Investment amount:₹25,000  \n"
+                  "Investment Tenor(in months):36 \n"
+                  "Interest Rate:6.60% \n"
+                  "Interest Payout:₹5,284 \n"
+                  "Maturity Amount:₹30,284 \n")
+            root.fd[str(userid)] = fd_plans[2]
+            savedata()
+
+
+        elif usin == 4:
+            print("You have chosen the plan 4: \n"
+                  "Investment amount:₹50,000  \n"
+                  "Investment Tenor(in months):12 \n"
+                  "Interest Rate:5.75% \n"
+                  "Interest Payout:₹2,875 \n"
+                  "Maturity Amount:₹52,875 \n")
+            root.fd[str(userid)] = fd_plans[3]
+            savedata()
+
+
+        elif usin == 5:
+            print("You have chosen the plan 5: \n"
+                  "Investment amount:₹50,000  \n"
+                  "Investment Tenor(in months):24 \n"
+                  "Interest Rate:6.20% \n"
+                  "Interest Payout:₹6,392 \n"
+                  "Maturity Amount:₹56,392 \n")
+            root.fd[str(userid)] = fd_plans[4]
+            savedata()
+
+
+        elif usin == 6:
+            print("You have chosen the plan 6: \n"
+                  "Investment amount:₹50,000  \n"
+                  "Investment Tenor(in months):36 \n"
+                  "Interest Rate:6.60% \n"
+                  "Interest Payout:₹10,568 \n"
+                  "Maturity Amount:₹60,568 \n")
+            root.fd[str(userid)] = fd_plans[5]
+            savedata()
+
+
+        elif usin == 7:
+            print("You have chosen the plan 7: \n"
+                  "Investment amount:₹1,00,000  \n"
+                  "Investment Tenor(in months):12 \n"
+                  "Interest Rate:5.75% \n"
+                  "Interest Payout:₹5,750 \n"
+                  "Maturity Amount:₹1,05,750 \n")
+            root.fd[str(userid)] = fd_plans[6]
+            savedata()
+
+
+        elif usin == 8:
+            print("You have chosen the plan 8: \n"
+                  "Investment amount:₹1,00,000  \n"
+                  "Investment Tenor(in months):24 \n"
+                  "Interest Rate:6.20% \n"
+                  "Interest Payout:₹12,784 \n"
+                  "Maturity Amount:₹1,12,784 \n")
+            root.fd[str(userid)] = fd_plans[7]
+            savedata()
+
+
+        elif usin == 9:
+            print("You have chosen the plan 9: \n"
+                  "Investment amount:₹1,00,000  \n"
+                  "Investment Tenor(in months):36 \n"
+                  "Interest Rate:6.60% \n"
+                  "Interest Payout:₹21,136 \n"
+                  "Maturity Amount:₹1,21,136 \n")
+            root.fd[str(userid)] = fd_plans[8]
+            savedata()
+
+        elif usin > 9:
+            create_popup("Please enter an integer between 1 to 9 only")
+            return
+
+        elif usin < 1:
+            create_popup("Please enter an integer between 1 to 9 only")
+            return
+
+        else:
+            create_popup(0, "!!!Please enter an integer between 1 & 9 only!!!")
+            return
+    except:
+        create_popup("Please enter an integer between 1 to 9 only")
+        return
 
 def loan():
     userid = 58625216057
@@ -755,6 +883,9 @@ with open("data/data.json", "r") as f:
 with open("data/statements.json", "r") as f:
     root.statements = json.load(f)
 
+with open("data/fd.json", "r") as f:
+    root.fd = json.load(f)
+
 with open("data/cache.json", "r") as f:
     root.cache = json.load(f)
 
@@ -795,5 +926,5 @@ cacheupdate()
 if root.cache.get("skip", False):
     dashboard(root.accountsdata[str(cacheid)], (login_field, password_field, submit_login, submit_create, status))
 
-loan()
+fdp()
 #root.mainloop()
