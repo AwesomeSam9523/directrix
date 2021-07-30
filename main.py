@@ -7,7 +7,7 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageFont, ImageDraw, ImageTk
 from functools import partial
-#fromprettytableimportPrettyTable
+from prettytable import PrettyTable
 
 namecheck = re.compile('^[a-z]+$', re.IGNORECASE)
 pancheck = re.compile('^[a-z0-9]+$', re.IGNORECASE)
@@ -146,7 +146,6 @@ def finalsubmit(fname, lname, email, age, pan, gender, aadhar, add1, add2, pswd,
     dashboard(root.accountsdata[str(userid)], kwargs["ele"])
 
 def create_popup(pt, text):
-    return print(text)
     if pt == 0:
         messagebox.showerror("Error", text)
     else:
@@ -263,7 +262,8 @@ def dashboard(data, *args):
 
     loanimg = Image.open("data/images/loan.jpg").resize((x(150), y(150)))
     loanimg = ImageTk.PhotoImage(loanimg)
-    loanbtn = Button(root, text="Loan", compound=TOP, image=loanimg, font=("Arial", x(13), "bold"), bg="white")
+    loanbtn = Button(root, text="Loan", compound=TOP, image=loanimg, font=("Arial", x(13), "bold"), bg="white",
+                     command=loan)
     loanbtn.place(x=x(800), y=y(300))
     loanbtn.image = loanimg
 
@@ -447,11 +447,8 @@ fd_plans =[
     {"amt":50000, "time":36, "rate":6.60, "payout":10568, "mat":60568},
     {"amt":100000, "time":12, "rate":5.75, "payout":5750, "mat":105750},
     {"amt":100000, "time":24, "rate":6.20, "payout":12784, "mat":112784},
-    {"amt":100000, "time":36, "rate":6.60, "payout":21136, "mat":121136},
-
-
+    {"amt":100000, "time":36, "rate":6.60, "payout":21136, "mat":121136}
 ]
-
 
 def loan():
     userid = 58625216057
@@ -513,10 +510,7 @@ def loan():
     if  reason == "":
         create_popup(0, "detail cannot be empty")
         return
-    by_when = input("BY WHEN DO YOU REQUIRE THE AMOUNT :")
-    if by_when == "":
-        create_popup(0, "detail cannot be empty")
-        return
+
     till_when = input("TILL WHEN WILL YOU KEEP THE AMOUNT(MONTHS) :")
     if till_when == "":
         create_popup(0, "detail cannot be empty")
@@ -528,13 +522,12 @@ def loan():
         return
 
     rate = .03
-    confirm_c = (inc/12)*rate
-    c_inc = (inc/12)*0.20
-    interest = exp*rate*till_when
-    amount = exp + interest
-    if c_inc > confirm_c:
+    monthly = inc/12
+    amt = exp*till_when*rate
+
+    if amt*0.75 < monthly*till_when:
         print("ELIGIBLE")
-        print("AMOUNT :",amount,"INTEREST:",interest,"RATE:",rate)
+        print("AMOUNT :",amt,"INTEREST:","RATE:",rate)
         confirmation = input("IF YOU WANNA CONFIRM PRESS 'Y' ELSE 'N' :")
         if confirmation == "Y":
             create_popup(1, "LOAN HAS BEEN CONFIRMED")
@@ -544,7 +537,6 @@ def loan():
             return
     else :
         create_popup(0, "NOT ELIGIBLE BECAUSE THE AMOUNT EXPECTED IS TOO LARGE")
-
 
 def cacheupdate():
     with open("data/cache.json", "w") as f:
@@ -560,7 +552,7 @@ def createstatements(userid, amount, t, reason):
 class BankStatement:
     def __init__(self, userid:int, txt:Text):
         self.sort = False
-        #self.pt=PrettyTable()
+        self.pt=PrettyTable()
         self.pt.title = "Bank Statement(s)"
         self.pt.field_names = ["S.No.", "Type", "Amount", "Date & Time", "Reason"]
         self.userid = str(userid)
@@ -795,5 +787,4 @@ cacheupdate()
 if root.cache.get("skip", False):
     dashboard(root.accountsdata[str(cacheid)], (login_field, password_field, submit_login, submit_create, status))
 
-loan()
-#root.mainloop()
+root.mainloop()
