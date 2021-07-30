@@ -129,6 +129,10 @@ def finalsubmit(fname, lname, email, age, pan, gender, aadhar, add1, add2, pswd,
         create_popup(0, "Invalid Aadhar number!")
         return
 
+    if " " in g_pswd:
+        create_popup(0, "Password cannot contain a space!")
+        return
+
     if not pswdcheck.search(g_pswd):
         create_popup(0, "Password should meet following criteria:\n"
                      "- Minimum 8 characters\n"
@@ -150,7 +154,6 @@ def finalsubmit(fname, lname, email, age, pan, gender, aadhar, add1, add2, pswd,
     dashboard(root.accountsdata[str(userid)], kwargs["ele"])
 
 def create_popup(pt, text):
-    return print(text)
     if pt == 0:
         messagebox.showerror("Error", text)
     else:
@@ -292,7 +295,8 @@ def dashboard(data, *args):
 
     chpswdimg = Image.open("data/images/passwd.png").resize((x(150), y(150)))
     chpswdimg = ImageTk.PhotoImage(chpswdimg)
-    chpswdbtn = Button(root, text="Change Pswd.", compound=TOP, image=chpswdimg, font=("Arial", x(13), "bold"), bg="white")
+    chpswdbtn = Button(root, text="Change Pswd.", compound=TOP, image=chpswdimg, font=("Arial", x(13), "bold"), bg="white",
+                       command=changepass)
     chpswdbtn.place(x=x(800), y=y(520))
     chpswdbtn.image = chpswdimg
 
@@ -600,11 +604,14 @@ def loan():
     if exp < 0:
         create_popup(0, "Amount cannot be negative")
         return
+    if exp >= (10)**7 :
+        create_popup(0, "Amount is too large")
+        return
     inc = input("ANNUAL INCOME:")
     if inc == "":
         create_popup(0, "Amount cannot be empty")
     try:
-        inc = int(inc)
+        inc = int(float(inc))
     except:
         create_popup(0, "Amount is not integer")
         return
@@ -641,16 +648,13 @@ def loan():
     if  reason == "":
         create_popup(0, "detail cannot be empty")
         return
-    by_when = input("BY WHEN DO YOU REQUIRE THE AMOUNT :")
-    if by_when == "":
-        create_popup(0, "detail cannot be empty")
-        return
+
     till_when = input("TILL WHEN WILL YOU KEEP THE AMOUNT(MONTHS) :")
     if till_when == "":
         create_popup(0, "detail cannot be empty")
         return
     try:
-        till_when = int(till_when)
+        till_when = int(float(till_when))
     except:
         create_popup(0, "Detail must be integer")
         return
@@ -673,10 +677,88 @@ def loan():
     else :
         create_popup(0, "NOT ELIGIBLE BECAUSE THE AMOUNT EXPECTED IS TOO LARGE")
 
+def loan_process(userid, amount, time, job):
+    if userid in root.data:
+        #..
+        return
+    {"amt":amount, "time":time}
 
 def cacheupdate():
     with open("data/cache.json", "w") as f:
         f.write(json.dumps(root.cache, indent=2))
+
+def changepass():
+    picon = ImageTk.PhotoImage(Image.open("data/images/deposit_icon.png"))
+    popup = Toplevel(root)
+    popup.iconphoto(False, picon)
+    popup.grab_set()
+    popup.resizable(0, 0)
+    a0 = int(root.wm_maxsize()[0])
+    a1 = int(root.wm_maxsize()[1])
+    popup.geometry(f"{int(a0 / 3)}x{int(a1 / 3)}+{int(a0 / 3)}+{int(a1 / 3)}")
+    popup.configure(bg="white")
+    popup.title("Directrix- Change Password")
+    popup.focus_set()
+    userid = 58625216057
+
+    chp = Label(popup, text="Change Password", font=("Arial", x(30), "bold", "underline"), bg="white")
+    chp.place(x=x(80), y=y(5))
+
+    chp = Label(popup, text="Current Pass:", font=("Arial", x(20)), bg="white")
+    chp.place(x=x(10), y=y(70))
+    cur = Entry(popup, font=("Arial", x(18)), bg="white", show="*")
+    cur.place(x=x(190), y=y(74))
+
+    newp = Label(popup, text=f"New Pass:", font=("Arial", x(20)), bg="white")
+    newp.place(x=x(10), y=y(140))
+    new = Entry(popup, font=("Arial", x(18)), bg="white", show="*")
+    new.place(x=x(190), y=y(140))
+
+    conp = Label(popup, text="Confirm Pass:", font=("Arial", x(20)), bg="white")
+    conp.place(x=x(10), y=y(180))
+    con = Entry(popup, font=("Arial", x(18)), bg="white", show="*")
+    con.place(x=x(190), y=y(180))
+
+    btn = Button(popup, text="Change", font=("Arial", x(15)), bg="#FFCF61",
+                 command=partial(passprocess, userid, cur, new, con, popup))
+    btn.place(x=x(150), y=y(240))
+    btn2 = Button(popup, text=" Cancel ", font=("Arial", x(15)), bg="#FF5959", command=popup.destroy)
+    btn2.place(x=x(240), y=y(240))
+
+def passprocess(userid, oldpass, newpass, confirmpass, popup):
+    userid = str(userid)
+    oldpass = oldpass.get().replace(" ", "")
+    newpass = newpass.get()
+    confirmpass = confirmpass.get()
+
+    if root.accountsdata[userid]["pswd"] != oldpass:
+        create_popup(0, "Current password is incorrect!")
+        return
+
+    if newpass == "":
+        create_popup(0, "New password cannot be empty!")
+        return
+
+    if " " in newpass:
+        create_popup(0, "Password cannot contain a space!")
+        return
+
+    if newpass != confirmpass:
+        create_popup(0, "New password and Confirm password do not match!")
+        return
+
+    if not pswdcheck.search(newpass):
+        create_popup(0, "Password should meet following criteria:\n"
+                     "- Minimum 8 characters\n"
+                     "- Must contain 1 uppercase letter\n"
+                     "- Must contain 1 lowercase letter\n"
+                     "- Must contain 1 symbol\n"
+                     "- Must contain 1 digit")
+        return
+    root.accountsdata[userid]["pswd"] = confirmpass
+    savedata()
+    create_popup(1, "Password changed successfully!")
+    popup.destroy()
 
 def createstatements(userid, amount, t, reason):
     if reason == "\n": reason = "N.A."
@@ -688,7 +770,7 @@ def createstatements(userid, amount, t, reason):
 class BankStatement:
     def __init__(self, userid:int, txt:Text):
         self.sort = False
-        #self.pt=PrettyTable()
+        self.pt=PrettyTable()
         self.pt.title = "Bank Statement(s)"
         self.pt.field_names = ["S.No.", "Type", "Amount", "Date & Time", "Reason"]
         self.userid = str(userid)
@@ -883,9 +965,6 @@ with open("data/data.json", "r") as f:
 with open("data/statements.json", "r") as f:
     root.statements = json.load(f)
 
-with open("data/fd.json", "r") as f:
-    root.fd = json.load(f)
-
 with open("data/cache.json", "r") as f:
     root.cache = json.load(f)
 
@@ -926,5 +1005,4 @@ cacheupdate()
 if root.cache.get("skip", False):
     dashboard(root.accountsdata[str(cacheid)], (login_field, password_field, submit_login, submit_create, status))
 
-fdp()
-#root.mainloop()
+root.mainloop()
