@@ -462,7 +462,7 @@ def loan():
         create_popup(0, "Amount cannot be empty")
         return
     try:
-        exp = int(exp)
+        exp = int(float(exp))
     except:
         create_popup(0, "Amount is not integer")
         return
@@ -476,7 +476,7 @@ def loan():
     if inc == "":
         create_popup(0, "Amount cannot be empty")
     try:
-        inc = int(inc)
+        inc = int(float(inc))
     except:
         create_popup(0, "Amount is not integer")
         return
@@ -522,7 +522,7 @@ def loan():
         create_popup(0, "detail cannot be empty")
         return
     try:
-        till_when = int(till_when)
+        till_when = int(float(till_when))
     except:
         create_popup(0, "Detail must be integer")
         return
