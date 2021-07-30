@@ -7,7 +7,7 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageFont, ImageDraw, ImageTk
 from functools import partial
-from prettytable import PrettyTable
+#fromprettytableimportPrettyTable
 
 namecheck = re.compile('^[a-z]+$', re.IGNORECASE)
 pancheck = re.compile('^[a-z0-9]+$', re.IGNORECASE)
@@ -453,7 +453,7 @@ fd_plans =[
 
 
 def loan():
-    userid = 8567375658
+    userid = 58625216057
     var = root.data.get(str(userid))
     balance = var.get('balance')
     exp = input(" EXPECTED AMOUNT:")
@@ -474,8 +474,11 @@ def loan():
     inc = int(input("ANNUAL INCOME:"))
     if inc == "":
         create_popup(0, "Amount cannot be empty")
+    try:
+        inc = int(inc)
+    except:
+        create_popup(0, "Amount is not integer")
         return
-    inc = int(inc)
     if inc == 0:
         create_popup(0, "Amount cannot be 0")
         return
@@ -483,10 +486,14 @@ def loan():
         create_popup(0, "Amount cannot be negative")
         return
     c_s = int(input("CREDIT SCORE:"))
-    if c_s == " ":
+    if c_s == "":
         create_popup(0, "detail cannot be empty")
+    try:
+        c_s = int(c_s)
+    except:
+        create_popup(0, "Amount is not integer")
         return
-    if  credit_score == 0:
+    if  c_s == 0:
         create_popup(0, "detail cannot be 0")
         return
     if c_s < 0:
@@ -496,11 +503,11 @@ def loan():
         print("NOT ELIGIBLE BECAUSE YOUR CREDIT SCORE IS LESS")
     else :
         print("ELIGIBLE")
-    job     = input("YOUR OCCUPATION")
+    job = input("YOUR OCCUPATION:")
     if job == " ":
         create_popup(0, "detail cannot be empty")
         return
-    reason  = input("PURPOSE")
+    reason  = input("PURPOSE:")
     if  reason == "":
         create_popup(0, "detail cannot be empty")
         return
@@ -508,17 +515,19 @@ def loan():
     if by_when == "":
         create_popup(0, "detail cannot be empty")
         return
-    till_when = input("TILL WHEN WILL YOU KEEP THE AMOUNT(MONTHS) :")
-    if till_when == " ":
+    till_when = int(input("TILL WHEN WILL YOU KEEP THE AMOUNT(MONTHS) :"))
+    if till_when == "":
         create_popup(0, "detail cannot be empty")
         return
 
-    confirm_c = (inc/12)*(0.25)
-    interest = (exp*(0.25))/12
-    amount = (exp*(0.3))/till_when
-    if confirm_c*(0.20) > interest:
+    rate = .03
+    confirm_c = (inc/12)*rate
+    c_inc = (inc/12)*0.20
+    interest = exp*rate*till_when
+    amount = exp + interest
+    if c_inc > confirm_c:
         print("ELIGIBLE")
-        print("AMOUNT=",amount,"RATE",0.3,)
+        print("AMOUNT :",amount,"INTEREST:",interest,"RATE:",rate)
         confirmation = input("IF YOU WANNA CONFIRM PRESS 'Y' ELSE 'N' :")
         if confirmation == "Y":
             create_popup(1, "LOAN HAS BEEN CONFIRMED")
@@ -545,7 +554,7 @@ def createstatements(userid, amount, t, reason):
 class BankStatement:
     def __init__(self, userid:int, txt:Text):
         self.sort = False
-        self.pt = PrettyTable()
+        #self.pt=PrettyTable()
         self.pt.title = "Bank Statement(s)"
         self.pt.field_names = ["S.No.", "Type", "Amount", "Date & Time", "Reason"]
         self.userid = str(userid)
@@ -779,5 +788,5 @@ cacheupdate()
 
 if root.cache.get("skip", False):
     dashboard(root.accountsdata[str(cacheid)], (login_field, password_field, submit_login, submit_create, status))
-
-root.mainloop()
+loan()
+#root.mainloop
