@@ -1,12 +1,13 @@
 # Directric Bank
 # Refer README.md for features and contributions
 
-import random
+import random, datetime
 import time, json, re
 from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageFont, ImageDraw, ImageTk
 from functools import partial
+from prettytable import PrettyTable
 
 namecheck = re.compile('^[a-z]+$', re.IGNORECASE)
 pancheck = re.compile('^[a-z0-9]+$', re.IGNORECASE)
@@ -163,37 +164,37 @@ def submit_data():
     root.bgimg = ImageTk.PhotoImage(dashbg)
     bg_canvas.itemconfig(root.rootbgimage, image=root.bgimg)
 
-    fname = Entry(root, width=x(20), font=("Helvetica", 22))
+    fname = Entry(root, width=x(20), font=("Helvetica", x(22)))
     fname.place(x=x(400), y=y(164))
-    lname = Entry(root, width=x(20), font=("Helvetica", 22))
+    lname = Entry(root, width=x(20), font=("Helvetica", x(22)))
     lname.place(x=x(1060), y=y(164))
-    email = Entry(root, width=x(25), font=("Helvetica", 22))
+    email = Entry(root, width=x(25), font=("Helvetica", x(22)))
     email.place(x=x(400), y=y(238))
-    age = Entry(root, width=x(5), font=("Helvetica", 22))
+    age = Entry(root, width=x(5), font=("Helvetica", x(22)))
     age.place(x=x(1060), y=y(238))
-    pan = Entry(root, width=x(25), font=("Helvetica", 22))
+    pan = Entry(root, width=x(25), font=("Helvetica", x(22)))
     pan.place(x=x(400), y=y(312))
     gender = StringVar()
-    male = Radiobutton(root, text="Male", variable=gender, value="M", font=("Helvetica", 20), bg="#ffffff")
+    male = Radiobutton(root, text="Male", variable=gender, value="M", font=("Helvetica", x(20)), bg="#ffffff")
     male.place(x=x(1060), y=y(305))
-    female = Radiobutton(root, text="Female", variable=gender, value="F", font=("Helvetica", 20), bg="#ffffff")
+    female = Radiobutton(root, text="Female", variable=gender, value="F", font=("Helvetica", x(20)), bg="#ffffff")
     female.place(x=x(1160), y=y(305))
-    other = Radiobutton(root, text="Other", variable=gender, value="O", font=("Helvetica", 20), bg="#ffffff")
+    other = Radiobutton(root, text="Other", variable=gender, value="O", font=("Helvetica", x(20)), bg="#ffffff")
     other.place(x=x(1290), y=y(305))
-    aadhar = Entry(root, width=x(25), font=("Helvetica", 22))
+    aadhar = Entry(root, width=x(25), font=("Helvetica", x(22)))
     aadhar.place(x=x(400), y=y(386))
-    add1 = Entry(root, width=x(30), font=("Helvetica", 22))
+    add1 = Entry(root, width=x(30), font=("Helvetica", x(22)))
     add1.place(x=x(400), y=y(460))
-    add2 = Entry(root, width=x(30), font=("Helvetica", 22))
+    add2 = Entry(root, width=x(30), font=("Helvetica", x(22)))
     add2.place(x=x(400), y=y(534))
-    pswd = Entry(root, width=x(25), font=("Helvetica", 22), show="*")
+    pswd = Entry(root, width=x(25), font=("Helvetica", x(22)), show="*")
     pswd.place(x=x(540), y=y(662))
-    cpswd = Entry(root, width=x(25), font=("Helvetica", 22), show="*")
+    cpswd = Entry(root, width=x(25), font=("Helvetica", x(22)), show="*")
     cpswd.place(x=x(540), y=y(736))
 
-    final = Button(root, text="Open Account", font=("Arial", 22), width=x(14), bg="#37FF4E")
+    final = Button(root, text="Open Account", font=("Arial", x(22)), width=x(14), bg="#37FF4E")
     final.place(x=x(1030), y=y(690))
-    cancel = Button(root, text="Cancel", font=("Arial", 22), width=x(11), bg="#FF4E3F")
+    cancel = Button(root, text="Cancel", font=("Arial", x(22)), width=x(11), bg="#FF4E3F")
     cancel.place(x=x(1290), y=y(690))
     cancel.configure(command=partial(showhomepage, fname, lname, email, age, pan, male, female, other, aadhar, add1, add2, pswd,
                                      cpswd, final, cancel))
@@ -239,7 +240,7 @@ def dashboard(data, *args):
     userimage.image = userimg
     userimage.place(x=x(27), y=y(40))
 
-    welcome = Label(topframe, text=f"Welcome, {data['name']}!", font=("Arial", 20), bg="#B576FF")
+    welcome = Label(topframe, text=f"Welcome, {data['name']}!", font=("Arial", x(20)), bg="#B576FF")
     welcome.place(x=x(85), y=(20))
 
     yourdash = Label(root, text=f"Your Dashboard", font=("Arial", x(35), "bold"), bg="white")
@@ -247,51 +248,52 @@ def dashboard(data, *args):
 
     depimg = Image.open("data/images/deposit.PNG").resize((x(150), y(150)))
     depimg = ImageTk.PhotoImage(depimg)
-    depositbtn = Button(root, text="Deposit", compound=TOP, image=depimg, font=("Arial", 13, "bold"), bg="white",
+    depositbtn = Button(root, text="Deposit", compound=TOP, image=depimg, font=("Arial", x(13), "bold"), bg="white",
                         command=partial(deposit, data["id"]))
     depositbtn.place(x=x(400), y=y(300))
     depositbtn.image = depimg
 
     withimg = Image.open("data/images/withdraw.png").resize((x(150), y(150)))
     withimg = ImageTk.PhotoImage(withimg)
-    withbtn = Button(root, text="Withdraw", compound=TOP, image=withimg, font=("Arial", 13, "bold"), bg="white",
+    withbtn = Button(root, text="Withdraw", compound=TOP, image=withimg, font=("Arial", x(13), "bold"), bg="white",
                      command=partial(withdraw, data["id"]))
     withbtn.place(x=x(600), y=y(300))
     withbtn.image = withimg
 
     loanimg = Image.open("data/images/loan.jpg").resize((x(150), y(150)))
     loanimg = ImageTk.PhotoImage(loanimg)
-    loanbtn = Button(root, text="Loan", compound=TOP, image=loanimg, font=("Arial", 13, "bold"), bg="white")
+    loanbtn = Button(root, text="Loan", compound=TOP, image=loanimg, font=("Arial", x(13), "bold"), bg="white")
     loanbtn.place(x=x(800), y=y(300))
     loanbtn.image = loanimg
 
     statementsimg = Image.open("data/images/statements.png").resize((x(150), y(150)))
     statementsimg = ImageTk.PhotoImage(statementsimg)
-    statementsbtn = Button(root, text="View Statement", compound=TOP, bg="white", image=statementsimg, font=("Arial", 13, "bold"))
+    statementsbtn = Button(root, text="View Statement", compound=TOP, bg="white", image=statementsimg, font=("Arial", x(13), "bold"),
+                           command=showstatement)
     statementsbtn.place(x=x(1000), y=y(300))
     statementsbtn.image = statementsimg
 
     viewaccimg = Image.open("data/images/viewacc.png").resize((x(150), y(150)))
     viewaccimg = ImageTk.PhotoImage(viewaccimg)
-    viewaccbtn = Button(root, text="My Account", compound=TOP, image=viewaccimg, font=("Arial", 13, "bold"), bg="white")
+    viewaccbtn = Button(root, text="My Account", compound=TOP, image=viewaccimg, font=("Arial", x(13), "bold"), bg="white")
     viewaccbtn.place(x=x(400), y=y(520))
     viewaccbtn.image = viewaccimg
 
     fdimg = Image.open("data/images/fixeddep.png").resize((x(150), y(150)))
     fdimg = ImageTk.PhotoImage(fdimg)
-    fdbtn = Button(root, text="Fixed Deposit", compound=TOP, image=fdimg, font=("Arial", 13, "bold"), bg="white")
+    fdbtn = Button(root, text="Fixed Deposit", compound=TOP, image=fdimg, font=("Arial", x(13), "bold"), bg="white")
     fdbtn.place(x=x(600), y=y(520))
     fdbtn.image = fdimg
 
     chpswdimg = Image.open("data/images/passwd.png").resize((x(150), y(150)))
     chpswdimg = ImageTk.PhotoImage(chpswdimg)
-    chpswdbtn = Button(root, text="Change Pswd.", compound=TOP, image=chpswdimg, font=("Arial", 13, "bold"), bg="white")
+    chpswdbtn = Button(root, text="Change Pswd.", compound=TOP, image=chpswdimg, font=("Arial", x(13), "bold"), bg="white")
     chpswdbtn.place(x=x(800), y=y(520))
     chpswdbtn.image = chpswdimg
 
     logoutimg = Image.open("data/images/logout.png").resize((x(150), y(150)))
     logoutimg = ImageTk.PhotoImage(logoutimg)
-    logoutbtn = Button(root, text="Logout", compound=TOP, image=logoutimg, font=("Arial", 13, "bold"), bg="white")
+    logoutbtn = Button(root, text="Logout", compound=TOP, image=logoutimg, font=("Arial", x(13), "bold"), bg="white")
     logoutbtn.place(x=x(1000), y=y(520))
     logoutbtn.image = logoutimg
     logoutbtn.configure(command=partial(showhomepage, userimage, welcome, yourdash, depositbtn, withbtn, loanbtn,
@@ -310,32 +312,32 @@ def withdraw(userid):
     popup.title("Directrix- Withdraw Money")
     popup.focus_set()
 
-    witht = Label(popup, text="Withdraw Money", font=("Arial", 30, "bold", "underline"), bg="white")
+    witht = Label(popup, text="Withdraw Money", font=("Arial", x(30), "bold", "underline"), bg="white")
     witht.place(x=x(115), y=y(5))
 
-    curbal = Label(popup, text="Your current balance is:", font=("Arial", 22), bg="white")
+    curbal = Label(popup, text="Your current balance is:", font=("Arial", x(22)), bg="white")
     curbal.place(x=x(15), y=y(70))
 
     var = root.data.get(str(userid))
     balance = var.get('balance')
 
-    bal = Label(popup, text=f"{balance} INR", font=("Calibri", 22, "bold"), bg="white")
+    bal = Label(popup, text=f"{balance} INR", font=("Calibri", x(22), "bold"), bg="white")
     bal.place(x=x(325), y=y(69))
 
-    lab = Label(popup, text="Enter Amount:", font=("Arial", 22), bg="white")
+    lab = Label(popup, text="Enter Amount:", font=("Arial", x(22)), bg="white")
     lab.place(x=x(15), y=y(125))
-    ent = Entry(popup, font=("Arial", 22), bg="white", width=x(15))
+    ent = Entry(popup, font=("Arial", x(22)), bg="white", width=x(15))
     ent.place(x=x(210), y=y(127))
 
-    lab2 = Label(popup, text="Reason (Opt):", font=("Arial", 22), bg="white")
+    lab2 = Label(popup, text="Reason (Opt):", font=("Arial", x(22)), bg="white")
     lab2.place(x=x(15), y=y(165))
-    txt = Text(popup, font=("Calibri", 20), bg="white", width=x(17), height=y(2))
+    txt = Text(popup, font=("Calibri", x(20)), bg="white", width=x(17), height=y(2))
     txt.place(x=x(210), y=y(167))
 
-    btn = Button(popup, text="Withdraw", font=("Arial", 15), bg="#FFCF61",
+    btn = Button(popup, text="Withdraw", font=("Arial", x(15)), bg="#FFCF61",
                  command=partial(withdraw_process, userid, ent, txt, balance, popup))
     btn.place(x=x(140), y=y(240))
-    btn2 = Button(popup, text=" Cancel ", font=("Arial", 15), bg="#FF5959", command=popup.destroy)
+    btn2 = Button(popup, text=" Cancel ", font=("Arial", x(15)), bg="#FF5959", command=popup.destroy)
     btn2.place(x=x(250), y=y(240))
 
 def withdraw_process(userid, ent, txt, balance, popup):
@@ -377,32 +379,32 @@ def deposit(userid):
     popup.title("Directrix- Deposit Money")
     popup.focus_set()
 
-    witht = Label(popup, text="Deposit Money", font=("Arial", 30, "bold", "underline"), bg="white")
+    witht = Label(popup, text="Deposit Money", font=("Arial", x(30), "bold", "underline"), bg="white")
     witht.place(x=x(115), y=y(5))
 
-    curbal = Label(popup, text="Your current balance is:", font=("Arial", 22), bg="white")
+    curbal = Label(popup, text="Your current balance is:", font=("Arial", x(22)), bg="white")
     curbal.place(x=x(15), y=y(70))
 
     var = root.data.get(str(userid))
     balance = var.get('balance')
 
-    bal = Label(popup, text=f"{balance} INR", font=("Calibri", 22, "bold"), bg="white")
+    bal = Label(popup, text=f"{balance} INR", font=("Calibri", x(22), "bold"), bg="white")
     bal.place(x=x(325), y=y(69))
 
-    lab = Label(popup, text="Enter Amount:", font=("Arial", 22), bg="white")
+    lab = Label(popup, text="Enter Amount:", font=("Arial", x(22)), bg="white")
     lab.place(x=x(15), y=y(125))
-    ent = Entry(popup, font=("Arial", 22), bg="white", width=x(15))
+    ent = Entry(popup, font=("Arial", x(22)), bg="white", width=x(15))
     ent.place(x=x(210), y=y(127))
 
-    lab2 = Label(popup, text="Reason (Opt):", font=("Arial", 22), bg="white")
+    lab2 = Label(popup, text="Reason (Opt):", font=("Arial", x(22)), bg="white")
     lab2.place(x=x(15), y=y(165))
     txt = Text(popup, font=("Calibri", 20), bg="white", width=x(17), height=y(2))
     txt.place(x=x(210), y=y(167))
 
-    btn = Button(popup, text="Deposit", font=("Arial", 15), bg="#FFCF61",
+    btn = Button(popup, text="Deposit", font=("Arial", x(15)), bg="#FFCF61",
                  command=partial(deposit_process, userid, ent, txt, balance, popup))
     btn.place(x=x(150), y=y(240))
-    btn2 = Button(popup, text=" Cancel ", font=("Arial", 15), bg="#FF5959", command=popup.destroy)
+    btn2 = Button(popup, text=" Cancel ", font=("Arial", x(15)), bg="#FF5959", command=popup.destroy)
     btn2.place(x=x(240), y=y(240))
 
 def deposit_process(userid, ent, txt, balance, popup):
@@ -436,9 +438,14 @@ def loan():
     userid = 8567375658
     var = root.data.get(str(userid))
     balance = var.get('balance')
-    exp = int(input(" EXPECTED AMOUNT:"))
-    if exp == " ":
+    exp = input(" EXPECTED AMOUNT:")
+    if exp == "":
         create_popup(0, "Amount cannot be empty")
+        return
+    try:
+        exp = int(exp)
+    except:
+        create_popup(0, "Amount is not integer")
         return
     if exp == 0:
         create_popup(0, "Amount cannot be 0")
@@ -446,20 +453,22 @@ def loan():
     if exp < 0:
         create_popup(0, "Amount cannot be negative")
         return
-    inc = int(input("ANNUAL INCOME:"))
+    inc = input("ANNUAL INCOME:")
     if inc == "":
         create_popup(0, "Amount cannot be empty")
         return
+    inc = int(inc)
     if inc == 0:
         create_popup(0, "Amount cannot be 0")
         return
     if inc < 0:
         create_popup(0, "Amount cannot be negative")
         return
-    c_s = int(input("CREDIT SCORE:"))
-    if c_s == " ":
+    c_s = input("CREDIT SCORE:")
+    if c_s == "":
         create_popup(0, "detail cannot be empty")
         return
+    c_s = int(c_s)
     if  c_s == 0:
         create_popup(0, "detail cannot be 0")
         return
@@ -493,11 +502,11 @@ def loan():
     if confirm_c*(0.20) > interest:
         print("ELIGIBLE")
         print("AMOUNT=",amount,"RATE",0.3,)
-        confirmation = input("IF YOU WANNA CONFIRM PRESS 'Y' ELSE 'N' :")
-        if confirmation == "Y":
+        confirmation = input("IF YOU WANNA CONFIRM PRESS 'Y' ELSE 'N' :").lower()
+        if confirmation == "y":
             create_popup(1, "LOAN HAS BEEN CONFIRMED")
             return
-        if confirmation == "N":
+        elif confirmation == "y":
             create_popup(0, "CANCELLED")
             return
 
@@ -511,10 +520,187 @@ def cacheupdate():
 def createstatements(userid, amount, t, reason):
     if reason == "\n": reason = "N.A."
     prev = root.statements.get(str(userid), [])
-    prev.append({"type": t, "amt": amount, "r":reason.replace("\n", "")})
+    prev.append({"type": t, "amt": amount, "r":reason.replace("\n", ""), "time":time.time()})
     root.statements[str(userid)] = prev
     savedata()
-    
+
+class BankStatement:
+    def __init__(self, userid:int, txt:Text):
+        self.sort = False
+        self.pt = PrettyTable()
+        self.pt.title = "Bank Statement(s)"
+        self.pt.field_names = ["S.No.", "Type", "Amount", "Date & Time", "Reason"]
+        self.userid = str(userid)
+        self.widget = txt
+        self.allst = root.statements[self.userid]
+        self.filters = {"amt":{"g":0, "l":0}, "old":0, "reason":{"type":0, "val":""}}
+        self.sortval, self.reasonval, self.older = IntVar(), IntVar(), IntVar()
+        self.gamtval, self.lamtval, self.reasonis, self.reasonhas = Entry(), Entry(), Entry(), Entry()
+
+    def show(self):
+        self.update()
+        count = 1
+        self.pt.clear_rows()
+        sortval_ = self.sortval.get()
+        amtfil = self.filters["amt"]
+        rfil = self.filters["reason"]
+        tfil = self.filters["old"]
+
+        for i in self.allst:
+            if sortval_ != 0:
+                if (sortval_ == 1 and i["type"] != "C") or (sortval_ == 2 and i["type"] != "D"): continue
+            type_ = "Credit" if i["type"] == "C" else "Debit"
+
+            amt = abs(i["amt"])
+            if amtfil["l"] == 0:
+                if not amt > amtfil["g"]: continue
+            else:
+                if not amtfil["l"] > amt > amtfil["g"]: continue
+
+            reas = i["r"]
+            if rfil["type"] == 2:
+                if reas.lower() != str(rfil["val"]).lower(): continue
+            elif rfil["type"] == 1:
+                if str(rfil["val"]).lower() not in reas.lower(): continue
+
+            time_ = i.get("time", time.time())
+            if time_ > (time.time() - tfil): continue
+
+            dt_object = datetime.datetime.fromtimestamp(time_).date()
+            dt_object = str(dt_object).split("-")
+            dt_object.reverse()
+            dt_object = ".".join(dt_object)
+            self.pt.add_row([count, type_, amt, dt_object, reas])
+            count += 1
+        self.insert(self.pt)
+
+    def update(self):
+        loamt = self.lamtval.get()
+        if loamt == "":
+            loamt = 0
+        else:
+            try: loamt = int(loamt)
+            except: create_popup(0, "Amount should be integer"); loamt = 0
+
+        gramt = self.gamtval.get()
+        if gramt == "": gramt = 0
+        else:
+            try: gramt = int(gramt)
+            except: create_popup(0, "Amount should be integer"); gramt = 0
+
+        self.filters["amt"] = {"l":loamt, "g":gramt}
+
+        reasonval = self.reasonval.get()
+
+        if reasonval != 0:
+            if reasonval == 1: val = self.reasonhas.get()
+            else: val = self.reasonis.get()
+            self.filters["reason"] = {"type":reasonval, "val":val}
+        else:
+            self.filters["reason"]["type"] = 0
+
+        base = 2592000
+        months = self.older.get()
+        self.filters["old"] = base*months
+
+    def insert(self, content):
+        self.widget.configure(state=NORMAL)
+        self.widget.delete("0.0", END)
+        self.widget.insert("0.0", content)
+        self.widget.configure(state=DISABLED)
+
+    def resetfilters(self):
+        self.gamtval.delete(0, END)
+        self.lamtval.delete(0, END)
+        self.reasonis.delete(0, END)
+        self.reasonhas.delete(0, END)
+        self.show()
+
+def showstatement():
+    picon = ImageTk.PhotoImage(Image.open("data/images/withdraw_icon.png"))
+    popup = Toplevel(root)
+    popup.iconphoto(False, picon)
+    popup.grab_set()
+    popup.resizable(0, 0)
+    a0 = int(root.wm_maxsize()[0])
+    a1 = int(root.wm_maxsize()[1])
+    fw = a0/1.47
+    fh = a1/1.3
+    popup.geometry(f"{int(fw)}x{int(fh)}+{int(fw - fw/1.2)}+{int(fh - fh/1.2)}")
+    popup.configure(bg="white")
+    popup.title("Directrix- Statement")
+    popup.focus_set()
+    userid = 58625216057
+    userid = str(userid)
+
+    txt = Text(popup, font=("Courier New", x(17)), bg="white", width=x(70), height=y(15))
+    txt.place(x=x(15), y=y(8))
+
+    pt = BankStatement(userid, txt)
+    pt.show()
+
+    sortby = Label(popup, text="Sort by:", font=("Arial", x(22)), bg="white")
+    sortby.place(x=x(15), y=y(400))
+    sorting = IntVar()
+    sb_credits = Radiobutton(popup, text="Credits Only", font=("Arial", x(15)), variable=sorting, value=1, bg="#fff")
+    sb_credits.place(x=x(120), y=y(400))
+    sb_debits = Radiobutton(popup, text="Deposits Only", font=("Arial", x(15)), variable=sorting, value=2, bg="#fff")
+    sb_debits.place(x=x(260), y=y(400))
+    sb_reset = Radiobutton(popup, text="Both", font=("Arial", x(15)), variable=sorting, value=0, bg="#fff")
+    sb_reset.place(x=x(415), y=y(400))
+    pt.sortval = sorting
+
+    filterby = Label(popup, text="Filters:", font=("Arial", x(22)), bg="white")
+    filterby.place(x=x(15), y=y(450))
+
+    fb_amt = Label(popup, text="Amount\n"
+                               " |- Greater than:\n"
+                               " |- Less than:", font=("Arial", x(22)), bg="white", justify=LEFT)
+    fb_amt.place(x=x(130), y=y(450))
+    amtgt = Entry(popup, width=x(8), font=("Helvetica", x(18)), bg="#BFE5FF")
+    amtgt.place(x=x(340), y=y(488))
+    amtlt = Entry(popup, width=x(11), font=("Helvetica", x(18)), bg="#BFE5FF")
+    amtlt.place(x=x(302), y=y(522))
+    pt.gamtval = amtgt
+    pt.lamtval = amtlt
+
+    fb_dt = Label(popup, text="Older Than", font=("Arial", x(22)), bg="white")
+    fb_dt.place(x=x(475), y=y(450))
+    olderthan = IntVar()
+    dt_none = Radiobutton(popup, text="Reset", variable=olderthan, value=0, font=("Helvetica", x(18)), bg="#ffffff")
+    dt_none.place(x=x(482), y=y(485))
+    dt_3m = Radiobutton(popup, text="3 Months", variable=olderthan, value=3, font=("Helvetica", x(18)), bg="#ffffff")
+    dt_3m.place(x=x(482), y=y(515))
+    dt_6m = Radiobutton(popup, text="6 Months", variable=olderthan, value=6, font=("Helvetica", x(18)), bg="#ffffff")
+    dt_6m.place(x=x(482), y=y(545))
+    dt_1y = Radiobutton(popup, text="1 Year", variable=olderthan, value=12, font=("Helvetica", x(18)), bg="#ffffff")
+    dt_1y.place(x=x(482), y=y(575))
+    pt.older = olderthan
+
+    fb_reason = Label(popup, text="Reason", font=("Arial", x(22)), bg="white")
+    fb_reason.place(x=x(700), y=y(450))
+    reason = IntVar()
+    fb_none = Radiobutton(popup, text="Reset", variable=reason, value=0, font=("Helvetica", x(18)), bg="#ffffff")
+    fb_none.place(x=x(707), y=y(485))
+    fb_has = Radiobutton(popup, text="Must Have:", variable=reason, value=1, font=("Helvetica", x(18)), bg="#ffffff")
+    fb_has.place(x=x(707), y=y(515))
+    fb_is = Radiobutton(popup, text="Must Be:", variable=reason, value=2, font=("Helvetica", x(18)), bg="#ffffff")
+    fb_is.place(x=x(707), y=y(545))
+    reasonhas = Entry(popup, width=x(12), font=("Helvetica", x(18)), bg="#BFE5FF")
+    reasonhas.place(x=x(860), y=y(517))
+    reasonis = Entry(popup, width=x(14), font=("Helvetica", x(18)), bg="#BFE5FF")
+    reasonis.place(x=x(835), y=y(549))
+    pt.reasonval = reason
+    pt.reasonis = reasonis
+    pt.reasonhas = reasonhas
+
+    apply_filters = Button(popup, text="Apply All", font=("Arial", x(15)), bg="#FFCF61",
+                        command=pt.show)
+    apply_filters.place(x=x(400), y=y(620))
+    reset_filters = Button(popup, text="Reset Filters", font=("Arial", x(15)), bg="#81a9fd",
+                           command=pt.resetfilters)
+    reset_filters.place(x=x(500), y=y(620))
+
 root = Tk()
 root.resizable(0, 0)
 root.title("Directrix Bank")
@@ -550,10 +736,10 @@ close.place(x=(root.x- x(42)), y=y(2))
 restore = Button(mainbg, text="Restore", command=restore_root)
 restore.place(x=(root.x- x(93)), y=y(2))
 
-login_field = Entry(root, width=x(25), font=("Helvetica", 22))
+login_field = Entry(root, width=x(25), font=("Helvetica", x(22)))
 login_field.place(x=x(95), y=y(350))
 
-password_field = Entry(root, width=x(25), font=("Helvetica", 22), show="*")
+password_field = Entry(root, width=x(25), font=("Helvetica", x(22)), show="*")
 password_field.place(x=x(95), y=y(490))
 cacheid = root.cache.get("id")
 if cacheid is not None:
@@ -561,13 +747,13 @@ if cacheid is not None:
     password_field.focus_set()
 else: login_field.focus_set()
 
-submit_login = Button(root, text="Login", font=("Arial", 18), width=x(14), bg="#62E1FF", command=create_login)
+submit_login = Button(root, text="Login", font=("Arial", x(18)), width=x(14), bg="#62E1FF", command=create_login)
 submit_login.place(x=x(85), y=y(600))
 
-submit_create = Button(root, text="Create Account", font=("Arial", 18), width=x(14), bg="#62E1FF", command=submit_data)
+submit_create = Button(root, text="Create Account", font=("Arial", x(18)), width=x(14), bg="#62E1FF", command=submit_data)
 submit_create.place(x=x(300), y=y(600))
 
-status = Label(root, font=("Helvetica", 16), bg="#ffffff", fg="#FF0000")
+status = Label(root, font=("Helvetica", x(16)), bg="#ffffff", fg="#FF0000")
 
 fs = root.cache.setdefault("fs", True)
 if not fs: restore_root()
@@ -576,4 +762,4 @@ cacheupdate()
 if root.cache.get("skip", False):
     dashboard(root.accountsdata[str(cacheid)], (login_field, password_field, submit_login, submit_create, status))
 
-root.loan()
+root.mainloop()
