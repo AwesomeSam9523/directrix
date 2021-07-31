@@ -459,9 +459,26 @@ fd_plans = [
 
 def fdp():
     userid = 56790311881
-    current_time = datetime.datetime.now(pytz.timezone('Asia/Kolkata'))
     if str(userid) in root.fd.keys():
         print("Respected Customer, You have already opted for a fixed deposit plan")
+        var = root.fd.get(str(userid))
+        print("Investment amount:", var["amt"])
+        print("Investment Tenor(in months):", var["time"])
+        print("Interest Rate:", var["rate"])
+        print("Interest Payout:", var["payout"])
+        print("Maturity Amount:", var["mat"])
+        time_ = var.get('start') # aaj se start hua hai
+        dt_object = datetime.datetime.fromtimestamp(time_).date()
+        dt_object = str(dt_object).split("-")
+        dt_object.reverse()
+        dt_object = ".".join(dt_object)
+        dt_object2 = datetime.datetime.fromtimestamp((var['time']*30*24*60*60)+ time_).date()
+        dt_object2 = str(dt_object2).split("-")
+        dt_object2.reverse()
+        dt_object2 = ".".join(dt_object2)
+        print('Start Date: ',dt_object)
+        print('End Date: ', dt_object2)
+        print()
         return
     for i in fd_plans:
         print("Investment amount:", i["amt"])
@@ -472,117 +489,26 @@ def fdp():
         print(" ")
     try:
         usin = int(input("Please choose one of the above mentioned fixed deposit plans:"))
-        if usin == 1:
-            print("You have chosen the plan 1: \n"
-                  "Investment amount:₹25,000  \n"
-                  "Investment Tenor(in months):12 \n"
-                  "Interest Rate:5.75% \n"
-                  "Interest Payout:₹1,561 \n"
-                  "Maturity Amount:₹26,61 \n")
-            root.fd[str(userid)] = fd_plans[0]
+        if usin >= 0  and usin <= len(fd_plans):
+            data = fd_plans[usin]
+            data.update({'start':time.time()})
+            print(f"You have chosen the plan {usin}: \n"
+                  f"Investment amount:₹{data ['amt']}  \n"
+                  f"Investment Tenor(in months):{data ['time']}\n"
+                  f"Interest Rate:{data ['rate']}% \n"
+                  f"Interest Payout:₹{data ['payout']} \n"
+                  f"Maturity Amount:₹{data ['mat']} \n")
+            root.fd[str(userid)] = data
+            #print(root.fd)
             savedata()
 
-
-        elif usin == 2:
-            print("You have chosen the plan 2: \n"
-                  "Investment amount:₹25,000  \n"
-                  "Investment Tenor(in months):24 \n"
-                  "Interest Rate:6.20% \n"
-                  "Interest Payout:₹3,196 \n"
-                  "Maturity Amount:₹28,196 \n")
-            root.fd[str(userid)] = fd_plans[1]
-            savedata()
-
-
-        elif usin == 3:
-            print("You have chosen the plan 3: \n"
-                  "Investment amount:₹25,000  \n"
-                  "Investment Tenor(in months):36 \n"
-                  "Interest Rate:6.60% \n"
-                  "Interest Payout:₹5,284 \n"
-                  "Maturity Amount:₹30,284 \n")
-            root.fd[str(userid)] = fd_plans[2]
-            savedata()
-
-
-        elif usin == 4:
-            print("You have chosen the plan 4: \n"
-                  "Investment amount:₹50,000  \n"
-                  "Investment Tenor(in months):12 \n"
-                  "Interest Rate:5.75% \n"
-                  "Interest Payout:₹2,875 \n"
-                  "Maturity Amount:₹52,875 \n")
-            root.fd[str(userid)] = fd_plans[3]
-            savedata()
-
-
-        elif usin == 5:
-            print("You have chosen the plan 5: \n"
-                  "Investment amount:₹50,000  \n"
-                  "Investment Tenor(in months):24 \n"
-                  "Interest Rate:6.20% \n"
-                  "Interest Payout:₹6,392 \n"
-                  "Maturity Amount:₹56,392 \n")
-            root.fd[str(userid)] = fd_plans[4]
-            savedata()
-
-
-        elif usin == 6:
-            print("You have chosen the plan 6: \n"
-                  "Investment amount:₹50,000  \n"
-                  "Investment Tenor(in months):36 \n"
-                  "Interest Rate:6.60% \n"
-                  "Interest Payout:₹10,568 \n"
-                  "Maturity Amount:₹60,568 \n")
-            root.fd[str(userid)] = fd_plans[5]
-            savedata()
-
-
-        elif usin == 7:
-            print("You have chosen the plan 7: \n"
-                  "Investment amount:₹1,00,000  \n"
-                  "Investment Tenor(in months):12 \n"
-                  "Interest Rate:5.75% \n"
-                  "Interest Payout:₹5,750 \n"
-                  "Maturity Amount:₹1,05,750 \n")
-            root.fd[str(userid)] = fd_plans[6]
-            savedata()
-
-
-        elif usin == 8:
-            print("You have chosen the plan 8: \n"
-                  "Investment amount:₹1,00,000  \n"
-                  "Investment Tenor(in months):24 \n"
-                  "Interest Rate:6.20% \n"
-                  "Interest Payout:₹12,784 \n"
-                  "Maturity Amount:₹1,12,784 \n")
-            root.fd[str(userid)] = fd_plans[7]
-            savedata()
-
-
-        elif usin == 9:
-            print("You have chosen the plan 9: \n"
-                  "Investment amount:₹1,00,000  \n"
-                  "Investment Tenor(in months):36 \n"
-                  "Interest Rate:6.60% \n"
-                  "Interest Payout:₹21,136 \n"
-                  "Maturity Amount:₹1,21,136 \n")
-            root.fd[str(userid)] = fd_plans[8]
-            savedata()
-
-        elif usin > 9:
-            create_popup("Please enter an integer between 1 to 9 only")
-            return
-
-        elif usin < 1:
-            create_popup("Please enter an integer between 1 to 9 only")
-            return
 
         else:
-            create_popup(0, "!!!Please enter an integer between 1 & 9 only!!!")
+            create_popup(0, "Please enter an integer between 1 to 9 only")
             return
+
     except:
-        create_popup("Please enter an integer between 1 to 9 only")
+        create_popup(0, "Please enter an integer between 1 to 9 only")
         return
 
 def loan():
@@ -968,6 +894,9 @@ with open("data/statements.json", "r") as f:
 with open("data/cache.json", "r") as f:
     root.cache = json.load(f)
 
+with open("data/fd.json", "r") as f:
+    root.fd = json.load(f)
+
 bg_canvas = Canvas(root, width=root.x, height=root.wm_maxsize()[1])
 bg_canvas.place(x=x(0), y=y(0))
 root.rootbgimage = bg_canvas.create_image(0, 0, image=root.bgimg, anchor="nw")
@@ -1005,4 +934,5 @@ cacheupdate()
 if root.cache.get("skip", False):
     dashboard(root.accountsdata[str(cacheid)], (login_field, password_field, submit_login, submit_create, status))
 
-root.mainloop()
+fdp()
+#root.mainloop()
