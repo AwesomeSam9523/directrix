@@ -2,7 +2,6 @@
 # Refer README.md for features and contributions
 
 import random, datetime
-import pytz
 import time, json, re
 from tkinter import *
 from tkinter import messagebox
@@ -511,6 +510,32 @@ def fdp():
         create_popup(0, "Please enter an integer between 1 to 9 only")
         return
 
+
+def myaccount():
+    userid = 58625216057
+    var = root.accountsdata.get(str(userid))
+    name = var["name"]
+    emailid = var["email"]
+    email2 = email.split("@")[0]
+    email_final = email[:3] + "*" * (len(email2) - 3)
+    address = var["address"]
+    age = var["age"]
+    gender = var["gender"]
+    va = root.data.get(str(userid))
+    balance = va["balance"]
+    if str(userid) in root.fd.keys():
+        fd = True
+    if str(userid) not in root.fd.keys():
+        fd = False
+    if root.data[userid].get("loan") is not None:
+        loan_ = True
+    if root.data[userid].get("loan") is not None:
+        loan_ = False
+
+
+
+
+
 def loan():
     userid = 58625216057
     var = root.data.get(str(userid))
@@ -934,5 +959,5 @@ cacheupdate()
 if root.cache.get("skip", False):
     dashboard(root.accountsdata[str(cacheid)], (login_field, password_field, submit_login, submit_create, status))
 
-fdp()
+myaccount()
 #root.mainloop()
