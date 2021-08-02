@@ -8,7 +8,7 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageFont, ImageDraw, ImageTk
 from functools import partial
-from prettytable import PrettyTable
+from prettytable import prettytable, PrettyTable
 
 namecheck = re.compile('^[a-z]+$', re.IGNORECASE)
 pancheck = re.compile('^[a-z0-9]+$', re.IGNORECASE)
@@ -934,5 +934,4 @@ cacheupdate()
 if root.cache.get("skip", False):
     dashboard(root.accountsdata[str(cacheid)], (login_field, password_field, submit_login, submit_create, status))
 
-fdp()
-#root.mainloop()
+root.mainloop()
