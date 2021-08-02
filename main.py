@@ -513,12 +513,12 @@ def fdp():
 
 
 def myaccount():
-    userid = 58625216057
+    userid = "58625216057"
     var = root.accountsdata.get(str(userid))
     name = var["name"]
-    emailid = var["email"]
-    email2 = email.split("@")[0]
-    email_final = email[:3] + "*" * (len(email2) - 3)
+    email2 = var["email"].split("@")[0]
+    email_final = var["email"][:3] + "*" * (len(email2) - 3)+ "@gmail.com"
+    print(email_final)
     address = var["address"]
     age = var["age"]
     gender = var["gender"]
@@ -971,5 +971,5 @@ cacheupdate()
 if root.cache.get("skip", False):
     dashboard(root.accountsdata[str(cacheid)], (login_field, password_field, submit_login, submit_create, status))
 
-fdp()
+myaccount()
 #root.mainloop()
