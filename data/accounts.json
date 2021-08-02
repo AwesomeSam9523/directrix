@@ -31,5 +31,16 @@
     "aadhar": 123456789012,
     "name": "Vatsal Saxena",
     "id": "35834643982"
+  },
+  "34160642536": {
+    "pswd": "Ahaan@12",
+    "email": "ahaa12@gmail.com",
+    "address": "sanjay nagar, gzb",
+    "age": 21,
+    "gender": "M",
+    "pan": "1234567890",
+    "aadhar": 112345678901,
+    "name": "AHAAN PARASHAR",
+    "id": "34160642536"
   }
 }

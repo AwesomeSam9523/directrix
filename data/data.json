@@ -1,6 +1,16 @@
 {
   "58625216057": {
-    "balance": 400
+    "balance": 400,
+    "loan": {
+      "exp": 50000,
+      "inc": 1000000,
+      "credit score": 760,
+      "reason:": "SDFSD",
+      "job": "FDSFDF",
+      "interest": 36000.0,
+      "total amount": 86000.0,
+      "rate": 0.03
+    }
   },
   "48799822329": {
     "balance": 0
@@ -22,5 +32,8 @@
   },
   "35834643982": {
     "balance": 1710
+  },
+  "34160642536": {
+    "balance": 1000
   }
 }
