@@ -516,16 +516,16 @@ def loan():
     if root.data[userid].get("loan") is not None:
         print("Respected Customer, You have already applied for a loan")
         var = root.data.get(str(userid)).get("loan")
-        print("loan taken:", var["loan"])
+        print(var)
+        print("exp:", var["exp"])
         print("time:", var["time"])
         print("Interest Rate:", var["rate"])
-        print("total amount:", var["amount"])
-        print("interest amount:", var["interest"])
+        print("income:", var["inc"])
+        print("amt:", var["amt"])
+        print("interest amount:", var["rate"])
         print("occupation:", var["job"])
         print("purpose:", var["reason"])
-        print("credit score:", var["credit score"])
-
-
+        print("credit score:", var["cs"])
         return
 
     exp = input(" EXPECTED AMOUNT:")
@@ -616,7 +616,7 @@ def loan():
     else:
         create_popup(0, "invalid details")
         return
-    data = {"exp":exp,"inc":inc,"credit score":c_s,"reason:":reason,"job":job,"interest":interest,"total amount":amount,"rate":rate}
+    data = {"time": till_when,"exp":exp,"inc":inc,"cs":c_s,"reason":reason,"job":job,"interest":interest,"amt":amount,"rate":rate}
     root.data[str(userid)]["loan"] = data
     savedata()
 
