@@ -2,6 +2,7 @@
 # Refer README.md for features and contributions
 
 import random, datetime
+
 import time, json, re
 from tkinter import *
 from tkinter import messagebox
@@ -537,9 +538,22 @@ def myaccount():
 
 
 def loan():
-    userid = 58625216057
-    var = root.data.get(str(userid))
-    balance = var.get('balance')
+    userid = "58625216057"
+    if root.data[userid].get("loan") is not None:
+        print("Respected Customer, You have already applied for a loan")
+        var = root.data.get(str(userid)).get("loan")
+        print("loan taken:", var["loan"])
+        print("time:", var["time"])
+        print("Interest Rate:", var["rate"])
+        print("total amount:", var["amount"])
+        print("interest amount:", var["interest"])
+        print("occupation:", var["job"])
+        print("purpose:", var["reason"])
+        print("credit score:", var["credit score"])
+
+
+        return
+
     exp = input(" EXPECTED AMOUNT:")
     if exp == "":
         create_popup(0, "Amount cannot be empty")
@@ -555,7 +569,7 @@ def loan():
     if exp < 0:
         create_popup(0, "Amount cannot be negative")
         return
-    if exp >= (10)**7 :
+    if exp >= (10) ** 7:
         create_popup(0, "Amount is too large")
         return
     inc = input("ANNUAL INCOME:")
@@ -586,17 +600,17 @@ def loan():
     if c_s < 0:
         create_popup(0, "deatil cannot be negative")
         return
-    if c_s < 700 :
+    if c_s < 700:
         print("NOT ELIGIBLE BECAUSE YOUR CREDIT SCORE IS LESS")
         return
-    else :
+    else:
         print("ELIGIBLE")
     job = input("YOUR OCCUPATION:")
     if job == "":
         create_popup(0, "detail cannot be empty")
         return
-    reason  = input("PURPOSE:")
-    if  reason == "":
+    reason = input("PURPOSE:")
+    if reason == "":
         create_popup(0, "detail cannot be empty")
         return
 
@@ -611,28 +625,26 @@ def loan():
         return
 
     rate = .03
-    confirm_c = (inc/12)*rate
-    c_inc = (inc/12)*0.20
-    interest = exp*rate*till_when
+    confirm_c = (inc / 12) * rate
+    c_inc = (inc / 12) * 0.20
+    interest = exp * rate * till_when
     amount = exp + interest
     if c_inc > confirm_c:
         print("ELIGIBLE")
-        print("AMOUNT :",amount,"INTEREST:",interest,"RATE:",rate)
+        print("AMOUNT :", amount, "INTEREST:", interest, "RATE:", rate)
         confirmation = input("IF YOU WANNA CONFIRM PRESS 'Y' ELSE 'N' :")
         if confirmation == "Y":
             create_popup(1, "LOAN HAS BEEN CONFIRMED")
-            return
-        if confirmation == "N":
+
+        elif confirmation == "N":
             create_popup(0, "CANCELLED")
             return
-    else :
-        create_popup(0, "NOT ELIGIBLE BECAUSE THE AMOUNT EXPECTED IS TOO LARGE")
-
-def loan_process(userid, amount, time, job):
-    if userid in root.data:
-        #..
+    else:
+        create_popup(0, "invalid details")
         return
-    {"amt":amount, "time":time}
+    data = {"exp":exp,"inc":inc,"credit score":c_s,"reason:":reason,"job":job,"interest":interest,"total amount":amount,"rate":rate}
+    root.data[str(userid)]["loan"] = data
+    savedata()
 
 def cacheupdate():
     with open("data/cache.json", "w") as f:
@@ -959,5 +971,5 @@ cacheupdate()
 if root.cache.get("skip", False):
     dashboard(root.accountsdata[str(cacheid)], (login_field, password_field, submit_login, submit_create, status))
 
-myaccount()
+fdp()
 #root.mainloop()
