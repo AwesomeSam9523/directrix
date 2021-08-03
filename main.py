@@ -269,7 +269,8 @@ def dashboard(data, *args):
 
     loanimg = Image.open("data/images/loan.jpg").resize((x(150), y(150)))
     loanimg = ImageTk.PhotoImage(loanimg)
-    loanbtn = Button(root, text="Loan", compound=TOP, image=loanimg, font=("Arial", x(13), "bold"), bg="white")
+    loanbtn = Button(root, text="Loan", compound=TOP, image=loanimg, font=("Arial", x(13), "bold"), bg="white",
+                     command=loan)
     loanbtn.place(x=x(800), y=y(300))
     loanbtn.image = loanimg
 
@@ -555,7 +556,7 @@ def fdp():
 
 def loan():
     userid = "58625216057"
-    if root.data[userid].get("loan") is not None:
+    if root.data[userid].get("loan") is None:
         print("Respected Customer, You have already applied for a loan")
         var = root.data.get(str(userid)).get("loan")
         print(var)
@@ -569,8 +570,58 @@ def loan():
         print("purpose:", var["reason"])
         print("credit score:", var["cs"])
         return
+    picon = ImageTk.PhotoImage(Image.open("data/images/withdraw_icon.png"))
+    popup = Toplevel(root)
+    popup.iconphoto(False, picon)
+    popup.grab_set()
+    popup.resizable(0, 0)
+    a0 = int(root.wm_maxsize()[0])
+    a1 = int(root.wm_maxsize()[1])
+    fw = a0 / 2.0
+    fh = a1 / 2.0
+    popup.geometry(f"{int(fw)}x{int(fh)}+{int(a0 / 2 - fw / 2)}+{int(a1 / 2 - fh / 2)}")
+    popup.configure(bg="white")
+    popup.title("Directrix- Fixed Deposit")
+    popup.focus_set()
+    userid = 56790311881
+    userid = str(userid)
+    loan_details = Label(popup, text=f"Loan Details", font=("Arial", x(27), "bold", "underline"), bg="white")
+    loan_details.place(x=x(290), y=y(0))
+    expected_ = Label(popup, text=f"Amount: ", font=("Arial", x(22)), bg="white")
+    expected_.place(x=x(15), y=y(100))
+    income_ = Label(popup, text=f"Income: ", font=("Arial", x(22)), bg="white")
+    income_.place(x=x(15), y=y(151))
+    credit_ = Label(popup, text=f"Credit score: ", font=("Arial", x(22)), bg="white")
+    credit_.place(x=x(15), y=y(196))
+    reason_ = Label(popup, text=f"Reason: ", font=("Arial", x(22)), bg="white")
+    reason_.place(x=x(15), y=y(241))
+    job_= Label(popup, text=f"Job: ", font=("Arial", x(22)), bg="white")
+    job_.place(x=x(15), y=y(286))
+    time_ = Label(popup, text=f"time: ", font=("Arial", x(22)), bg="white")
+    time_.place(x=x(15), y=y(331))
 
-    exp = input(" EXPECTED AMOUNT:")
+    expected = Entry(popup, width=x(20), font=("Helvetica", x(22)))
+    expected.place(x=x(190), y=y(100))
+    income = Entry(popup, width=x(20), font=("Helvetica", x(22)))
+    income.place(x=x(190), y=y(151))
+    cs = Entry(popup, width=x(20), font=("Helvetica", x(22)))
+    cs.place(x=x(190), y=y(196))
+    reason = Entry(popup, width=x(20), font=("Helvetica", x(22)))
+    reason.place(x=x(190), y=y(241))
+    job = Entry(popup, width=x(20), font=("Helvetica", x(22)))
+    job.place(x=x(190), y=y(286))
+    time__ = Entry(popup, width=x(20), font=("Helvetica", x(22)))
+    time__.place(x=x(190), y=y(331))
+
+    close = Button(popup, text="submit", font=("Arial", x(15)), bg="#FFCF61",
+                   command=popup.destroy)
+    close.place(x=x(275), y=y(380))
+    close = Button(popup, text="Cancel", font=("Arial", x(15)), bg="#FFCF61",
+                   command=popup.destroy)
+    close.place(x=x(400), y=y(380))
+
+
+    """exp = input(" EXPECTED AMOUNT:")
     if exp == "":
         create_popup(0, "Amount cannot be empty")
         return
@@ -660,7 +711,7 @@ def loan():
         return
     data = {"time": till_when,"exp":exp,"inc":inc,"cs":c_s,"reason":reason,"job":job,"interest":interest,"amt":amount,"rate":rate}
     root.data[str(userid)]["loan"] = data
-    savedata()
+    savedata()"""
 
 def cacheupdate():
     with open("data/cache.json", "w") as f:
