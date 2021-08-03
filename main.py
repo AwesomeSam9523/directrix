@@ -755,10 +755,10 @@ def create_acc():
     a0 = int(root.wm_maxsize()[0])
     a1 = int(root.wm_maxsize()[1])
     fw = a0 / 2
-    fh = a1 / 1.8
+    fh = a1 / 1.56
     popup.geometry(f"{int(fw)}x{int(fh)}+{int(a0 / 2 - fw / 2)}+{int(a1 / 2 - fh / 2)}")
     popup.configure(bg="white")
-    popup.title("Directrix- Fixed Deposit")
+    popup.title("Directrix- My Account")
     popup.focus_set()
     userid = 35834643982
     userid = str(userid)
@@ -790,28 +790,49 @@ def create_acc():
     time = a["time"]
 
     acount_details = Label(popup, text=f"Account Details", font=("Arial", x(27), "bold", "underline"), bg="white")
-
+    acount_details.place(x=x(260), y=y(0))
     name_ = Label(popup, text=f"Full Name: {name}", font=("Arial", x(22)), bg="white")
-    name_.place(x=x(15), y=y(45))
-    email_ = Label(popup, text=f"E-mail ID: {email} ", font=("Arial", x(22)), bg="white")
-    email_.place(x=x(15), y=y(45))
+    name_.place(x=x(15), y=y(50))
+    email_ = Label(popup, text=f"E-mail ID: {email_final} ", font=("Arial", x(22)), bg="white")
+    email_.place(x=x(15), y=y(90))
     address_ = Label(popup, text=f"Address: {address} ", font=("Arial", x(22)), bg="white")
-    address_.place(x=x(15), y=y(45))
+    address_.place(x=x(15), y=y(130))
     age_ = Label(popup, text=f"Age: {age}", font=("Arial", x(22)), bg="white")
-    age_.place(x=x(15), y=y(45))
+    age_.place(x=x(15), y=y(170))
     gender_ = Label(popup, text=f"Gender: {gender} ", font=("Arial", x(22)), bg="white")
-    gender_.place(x=x(15), y=y(45))
+    gender_.place(x=x(15), y=y(210))
     accid = Label(popup, text=f"Account ID:{userid} ", font=("Arial", x(22)), bg="white")
-    accid.place(x=x(15), y=y(45))
+    accid.place(x=x(15), y=y(250))
+    bala = Label(popup, text=f"Balance:₹{balance} ", font=("Arial", x(22)), bg="white")
+    bala.place(x=x(15), y=y(290))
     if loan_:
         loanT = Label(popup, text=f"Loan Taken: Yes", font=("Arial", x(22)), bg="white")
+        loanT.place(x=x(15), y=y(330))
     else:
         loanf = Label(popup, text=f"Loan Taken: NO", font=("Arial", x(22)), bg="white")
+        loanf.place(x=x(15), y=y(330))
     if fd:
-        loanT = Label(popup, text=f"Fd opted: Yes", font=("Arial", x(22)), bg="white")
+        fdt = Label(popup, text=f"Fd opted: Yes", font=("Arial", x(22)), bg="white")
+        fdt.place(x=x(450), y=y(330))
     else:
-        loanf = Label(popup, text=f"Fd opted: NO", font=("Arial", x(22)), bg="white")
+        fdg = Label(popup, text=f"Fd opted: NO", font=("Arial", x(22)), bg="white")
+        fdg.place(x=x(450), y=y(330))
 
+    myTable = PrettyTable(["type", "amount", "reason", "time"])
+
+    # Add rows
+    myTable.add_row([type, amount, reason, time])
+    widget = Text(popup, font=("Courier New", x(17)), bg="white", width=x(60), height=y(6))
+    widget.place(x=x(15), y=y(380))
+    widget.configure(state=NORMAL)
+    widget.delete("0.0", END)
+    widget.insert("0.0", myTable)
+    widget.configure(state=DISABLED)
+
+
+    close = Button(popup, text="Close", font=("Arial", x(15)), bg="#FFCF61",
+                   command=popup.destroy)
+    close.place(x=x(335), y=y(510))
 class BankStatement:
     def __init__(self, userid:int, txt:Text):
         self.sort = False
