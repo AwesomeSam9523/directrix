@@ -2,13 +2,14 @@
   "58625216057": {
     "balance": 400,
     "loan": {
+      "time": 24,
       "exp": 50000,
       "inc": 1000000,
-      "credit score": 760,
-      "reason:": "SDFSD",
-      "job": "FDSFDF",
+      "cs": 750,
+      "reason": "sdfgg",
+      "job": "gfd",
       "interest": 36000.0,
-      "total amount": 86000.0,
+      "amt": 86000.0,
       "rate": 0.03
     }
   },
