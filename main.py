@@ -2,13 +2,12 @@
 # Refer README.md for features and contributions
 
 import random, datetime
-
 import time, json, re
 from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageFont, ImageDraw, ImageTk
 from functools import partial
-from prettytable import prettytable, PrettyTable
+from prettytable import PrettyTable
 
 namecheck = re.compile('^[a-z]+$', re.IGNORECASE)
 pancheck = re.compile('^[a-z0-9]+$', re.IGNORECASE)
@@ -283,13 +282,15 @@ def dashboard(data, *args):
 
     viewaccimg = Image.open("data/images/viewacc.png").resize((x(150), y(150)))
     viewaccimg = ImageTk.PhotoImage(viewaccimg)
-    viewaccbtn = Button(root, text="My Account", compound=TOP, image=viewaccimg, font=("Arial", x(13), "bold"), bg="white")
+    viewaccbtn = Button(root, text="My Account", compound=TOP, image=viewaccimg, font=("Arial", x(13), "bold"), bg="white",
+                        command=create_acc)
     viewaccbtn.place(x=x(400), y=y(520))
     viewaccbtn.image = viewaccimg
 
     fdimg = Image.open("data/images/fixeddep.png").resize((x(150), y(150)))
     fdimg = ImageTk.PhotoImage(fdimg)
-    fdbtn = Button(root, text="Fixed Deposit", compound=TOP, image=fdimg, font=("Arial", x(13), "bold"), bg="white")
+    fdbtn = Button(root, text="Fixed Deposit", compound=TOP, image=fdimg, font=("Arial", x(13), "bold"), bg="white",
+                   command=fdp)
     fdbtn.place(x=x(600), y=y(520))
     fdbtn.image = fdimg
 
@@ -443,7 +444,6 @@ def deposit_process(userid, ent, txt, balance, popup):
     popup.destroy()
     create_popup(1, f"The amount is successfully deposited")
 
-
 fd_plans = [
     {"amt": 25000, "time": 12, "rate": 5.75, "payout": 1561, "mat": 26561},  # (0)
     {"amt": 25000, "time": 24, "rate": 6.20, "payout": 3196, "mat": 28196},  # (1)
@@ -456,60 +456,102 @@ fd_plans = [
     {"amt": 100000, "time": 36, "rate": 6.60, "payout": 21136, "mat": 121136},  # (8)
 ]
 
-
 def fdp():
+
+    def fdstart():
+        index = fdindex.get()
+        if 0 <= index <= len(fd_plans):
+            data = fd_plans[index]
+            data.update({'start': time.time()})
+            root.fd[str(userid)] = data
+            savedata()
+            popup.destroy()
+            create_popup(1, "Success!")
+            fdp()
+        else:
+            create_popup(0, "Please select an option!")
+
+    picon = ImageTk.PhotoImage(Image.open("data/images/withdraw_icon.png"))
+    popup = Toplevel(root)
+    popup.iconphoto(False, picon)
+    popup.grab_set()
+    popup.resizable(0, 0)
+    a0 = int(root.wm_maxsize()[0])
+    a1 = int(root.wm_maxsize()[1])
+    fw = a0 / 2.1
+    fh = a1 / 2.1
+    popup.geometry(f"{int(fw)}x{int(fh)}+{int(a0/2 - fw/2)}+{int(a1/2 - fh/2)}")
+    popup.configure(bg="white")
+    popup.title("Directrix- Fixed Deposit")
+    popup.focus_set()
     userid = 56790311881
+    userid = str(userid)
+
     if str(userid) in root.fd.keys():
-        print("Respected Customer, You have already opted for a fixed deposit plan")
         var = root.fd.get(str(userid))
-        print("Investment amount:", var["amt"])
-        print("Investment Tenor(in months):", var["time"])
-        print("Interest Rate:", var["rate"])
-        print("Interest Payout:", var["payout"])
-        print("Maturity Amount:", var["mat"])
-        time_ = var.get('start') # aaj se start hua hai
+        time_ = var.get('start')  # aaj se start hua hai
         dt_object = datetime.datetime.fromtimestamp(time_).date()
         dt_object = str(dt_object).split("-")
         dt_object.reverse()
         dt_object = ".".join(dt_object)
-        dt_object2 = datetime.datetime.fromtimestamp((var['time']*30*24*60*60)+ time_).date()
+        dt_object2 = datetime.datetime.fromtimestamp((var['time'] * 30 * 24 * 60 * 60) + time_).date()
         dt_object2 = str(dt_object2).split("-")
         dt_object2.reverse()
         dt_object2 = ".".join(dt_object2)
-        print('Start Date: ',dt_object)
-        print('End Date: ', dt_object2)
-        print()
+
+        fdamt = Label(popup, text=f"Fixed Deposit Details", font=("Arial", x(27), "bold", "underline"), bg="white")
+        fdamt.place(x=x(200), y=y(5))
+
+        fdamt = Label(popup, text=f"Investement Amount: ₹{var['amt']}/-", font=("Arial", x(22)), bg="white")
+        fdamt.place(x=x(15), y=y(75))
+        fdten = Label(popup, text=f"Investement Tenure: {var['time']} months", font=("Arial", x(22)), bg="white")
+        fdten.place(x=x(15), y=y(115))
+        fdrate = Label(popup, text=f"Interest Rate: {var['rate']}%", font=("Arial", x(22)), bg="white")
+        fdrate.place(x=x(15), y=y(155))
+        fdpay = Label(popup, text=f"Interest Payout: ₹{var['payout']}/-", font=("Arial", x(22)), bg="white")
+        fdpay.place(x=x(15), y=y(195))
+        fdmat = Label(popup, text=f"Maturity Amount: ₹{var['mat']}", font=("Arial", x(22)), bg="white")
+        fdmat.place(x=x(15), y=y(235))
+        fdstart = Label(popup, text=f"Start Date: {dt_object}", font=("Arial", x(22)), bg="white")
+        fdstart.place(x=x(15), y=y(292))
+        fdend = Label(popup, text=f"End Date: {dt_object2}", font=("Arial", x(22)), bg="white")
+        fdend.place(x=x(380), y=y(292))
+        close = Button(popup, text="Close", font=("Arial", x(15)), bg="#FFCF61",
+                               command=popup.destroy)
+        close.place(x=x(320), y=y(350))
         return
+
+    a0 = int(root.wm_maxsize()[0])
+    a1 = int(root.wm_maxsize()[1])
+    fw = a0 / 1.7
+    fh = a1 / 1.8
+    popup.geometry(f"{int(fw)}x{int(fh)}+{int(a0 / 2 - fw / 2)}+{int(a1 / 2 - fh / 2)}")
+    fdindex = IntVar(value=10)
+    pdata = PrettyTable()
+    pdata.field_names = ["S.No.", "Investm.", "Tenure", "Rate", "Payout", "Maturity"]
+    txt = Text(popup, font=("Courier New", x(18)), bg="white", width=x(59), height=y(13))
+    txt.place(x=x(52), y=y(70))
+    fdwel = Label(popup, text=f"Choose F.D. Plan", font=("Arial", x(27), "bold", "underline"), bg="white")
+    fdwel.place(x=x(300), y=y(5))
+
+    yval = 150
+    sno = 1
     for i in fd_plans:
-        print("Investment amount:", i["amt"])
-        print("Investment Tenor(in months):", i["time"])
-        print("Interest Rate:", i["rate"])
-        print("Interest Payout:", i["payout"])
-        print("Maturity Amount:", i["mat"])
-        print(" ")
-    try:
-        usin = int(input("Please choose one of the above mentioned fixed deposit plans:"))
-        if usin >= 0  and usin <= len(fd_plans):
-            data = fd_plans[usin]
-            data.update({'start':time.time()})
-            print(f"You have chosen the plan {usin}: \n"
-                  f"Investment amount:₹{data ['amt']}  \n"
-                  f"Investment Tenor(in months):{data ['time']}\n"
-                  f"Interest Rate:{data ['rate']}% \n"
-                  f"Interest Payout:₹{data ['payout']} \n"
-                  f"Maturity Amount:₹{data ['mat']} \n")
-            root.fd[str(userid)] = data
-            #print(root.fd)
-            savedata()
+        plan = Radiobutton(popup, text=f"", font=("Arial", x(15)), variable=fdindex, value=fd_plans.index(i),
+                                 bg="#fff")
+        plan.place(x=x(25), y=y(yval))
+        pdata.add_row([sno, i["amt"], i["time"], f"{i['rate']}%", i["payout"], i["mat"]])
+        sno += 1
+        yval += y(27)
 
-
-        else:
-            create_popup(0, "Please enter an integer between 1 to 9 only")
-            return
-
-    except:
-        create_popup(0, "Please enter an integer between 1 to 9 only")
-        return
+    acc = Button(popup, text="Start F.D.", font=("Arial", x(15)), bg="#81a9fd",
+                   command=fdstart)
+    acc.place(x=x(320), y=y(425))
+    close = Button(popup, text="Cancel", font=("Arial", x(15)), bg="#FFCF61",
+                   command=popup.destroy)
+    close.place(x=x(430), y=y(425))
+    txt.insert("0.0", pdata)
+    txt.configure(state=DISABLED)
 
 def loan():
     userid = "58625216057"
@@ -704,6 +746,65 @@ def createstatements(userid, amount, t, reason):
     root.statements[str(userid)] = prev
     savedata()
 
+def create_acc():
+    picon = ImageTk.PhotoImage(Image.open("data/images/withdraw_icon.png"))
+    popup = Toplevel(root)
+    popup.iconphoto(False, picon)
+    popup.grab_set()
+    popup.resizable(0, 0)
+    a0 = int(root.wm_maxsize()[0])
+    a1 = int(root.wm_maxsize()[1])
+    fw = a0 / 2
+    fh = a1 / 1.8
+    popup.geometry(f"{int(fw)}x{int(fh)}+{int(a0 / 2 - fw / 2)}+{int(a1 / 2 - fh / 2)}")
+    popup.configure(bg="white")
+    popup.title("Directrix- Fixed Deposit")
+    popup.focus_set()
+    userid = 56790311881
+    userid = str(userid)
+    loan_, fd = True, True
+    var = root.accountsdata.get(str(userid))
+    name = var["name"]
+    email = var["email"]
+    email2 = email.split("@")[0]
+    email_final = email[:3] + "*" * (len(email2) - 3)
+    address = var["address"]
+    age = var["age"]
+    gender = var["gender"]
+    va = root.data.get(str(userid))
+    balance = va["balance"]
+    if str(userid) in root.fd.keys():
+        fd = True
+    if str(userid) not in root.fd.keys():
+        fd = False
+    if root.data[userid].get("loan") is not None:
+        loan_ = True
+    if root.data[userid].get("loan") is not None:
+        loan_ = False
+
+    acount_details = Label(popup, text=f"Account Details", font=("Arial", x(27), "bold", "underline"), bg="white")
+
+    name_ = Label(popup, text=f"Full Name: {name}", font=("Arial", x(22)), bg="white")
+    name_.place(x=x(15), y=y(45))
+    email_ = Label(popup, text=f"E-mail ID: {email} ", font=("Arial", x(22)), bg="white")
+    email_.place(x=x(15), y=y(45))
+    address_ = Label(popup, text=f"Address: {address} ", font=("Arial", x(22)), bg="white")
+    address_.place(x=x(15), y=y(45))
+    age_ = Label(popup, text=f"Age: {age}", font=("Arial", x(22)), bg="white")
+    age_.place(x=x(15), y=y(45))
+    gender_ = Label(popup, text=f"Gender: {gender} ", font=("Arial", x(22)), bg="white")
+    gender_.place(x=x(15), y=y(45))
+    accid = Label(popup, text=f"Account ID:{userid} ", font=("Arial", x(22)), bg="white")
+    accid.place(x=x(15), y=y(45))
+    if loan_:
+        loanT = Label(popup, text=f"Loan Taken: Yes", font=("Arial", x(22)), bg="white")
+    else:
+        loanf = Label(popup, text=f"Loan Taken: NO", font=("Arial", x(22)), bg="white")
+    if fd:
+        loanT = Label(popup, text=f"Fd opted: Yes", font=("Arial", x(22)), bg="white")
+    else:
+        loanf = Label(popup, text=f"Fd opted: NO", font=("Arial", x(22)), bg="white")
+
 class BankStatement:
     def __init__(self, userid:int, txt:Text):
         self.sort = False
@@ -806,7 +907,7 @@ def showstatement():
     a1 = int(root.wm_maxsize()[1])
     fw = a0/1.47
     fh = a1/1.3
-    popup.geometry(f"{int(fw)}x{int(fh)}+{int(fw - fw/1.2)}+{int(fh - fh/1.2)}")
+    popup.geometry(f"{int(fw)}x{int(fh)}+{int(a0/2 - fw/2)}+{int(a1/2 - fh/2)}")
     popup.configure(bg="white")
     popup.title("Directrix- Statement")
     popup.focus_set()
@@ -945,5 +1046,4 @@ cacheupdate()
 if root.cache.get("skip", False):
     dashboard(root.accountsdata[str(cacheid)], (login_field, password_field, submit_login, submit_create, status))
 
-loan()
-#root.mainloop()
+root.mainloop()
