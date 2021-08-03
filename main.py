@@ -811,14 +811,14 @@ def create_acc():
     popup.configure(bg="white")
     popup.title("Directrix- Fixed Deposit")
     popup.focus_set()
-    userid = 56790311881
+    userid = 35834643982
     userid = str(userid)
     loan_, fd = True, True
     var = root.accountsdata.get(str(userid))
     name = var["name"]
     email = var["email"]
     email2 = email.split("@")[0]
-    email_final = email[:3] + "*" * (len(email2) - 3)
+    email_final = email[:3] + "*" * (len(email2) - 3)+ "@gmail.com"
     address = var["address"]
     age = var["age"]
     gender = var["gender"]
@@ -832,6 +832,13 @@ def create_acc():
         loan_ = True
     if root.data[userid].get("loan") is not None:
         loan_ = False
+    v = root.statements.get(str(userid), [])
+    root.statements[str(userid)] = v
+    a = v[-1]
+    type = a["type"]
+    amount = a["amt"]
+    reason = a["r"]
+    time = a["time"]
 
     acount_details = Label(popup, text=f"Account Details", font=("Arial", x(27), "bold", "underline"), bg="white")
 
@@ -962,7 +969,7 @@ def showstatement():
     popup.configure(bg="white")
     popup.title("Directrix- Statement")
     popup.focus_set()
-    userid = 58625216057
+    userid = 35834643982
     userid = str(userid)
 
     txt = Text(popup, font=("Courier New", x(17)), bg="white", width=x(70), height=y(15))
