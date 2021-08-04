@@ -29,7 +29,18 @@
     "balance": 0
   },
   "56790311881": {
-    "balance": 277
+    "balance": 277,
+    "loan": {
+      "time": 12,
+      "exp": 100000,
+      "inc": 1,
+      "cs": 800,
+      "reason": "ahaan ki shaadi",
+      "job": "ahaan ka papa",
+      "interest": 36000.0,
+      "amt": 136000.0,
+      "rate": 0.03
+    }
   },
   "35834643982": {
     "balance": 13932

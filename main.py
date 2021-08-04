@@ -554,7 +554,7 @@ def fdp():
     txt.insert("0.0", pdata)
     txt.configure(state=DISABLED)
 
-def loan():
+'''def loan():
     userid = "58625216057"
     if root.data[userid].get("loan") is None:
         print("Respected Customer, You have already applied for a loan")
@@ -621,7 +621,7 @@ def loan():
     close.place(x=x(400), y=y(380))
 
 
-    """exp = input(" EXPECTED AMOUNT:")
+    exp = input(" EXPECTED AMOUNT:")
     if exp == "":
         create_popup(0, "Amount cannot be empty")
         return
@@ -711,7 +711,175 @@ def loan():
         return
     data = {"time": till_when,"exp":exp,"inc":inc,"cs":c_s,"reason":reason,"job":job,"interest":interest,"amt":amount,"rate":rate}
     root.data[str(userid)]["loan"] = data
-    savedata()"""
+    savedata()'''
+
+
+def loan():
+    userid = "58625216057"
+    if root.data[userid].get("loan") is None:
+        print("Respected Customer, You have already applied for a loan")
+        var = root.data.get(str(userid)).get("loan")
+        print(var)
+        print("exp:", var["exp"])
+        print("time:", var["time"])
+        print("Interest Rate:", var["rate"])
+        print("income:", var["inc"])
+        print("amt:", var["amt"])
+        print("interest amount:", var["rate"])
+        print("occupation:", var["job"])
+        print("purpose:", var["reason"])
+        return
+    picon = ImageTk.PhotoImage(Image.open("data/images/withdraw_icon.png"))
+    popup = Toplevel(root)
+    popup.iconphoto(False, picon)
+    popup.grab_set()
+    popup.resizable(0, 0)
+    a0 = int(root.wm_maxsize()[0])
+    a1 = int(root.wm_maxsize()[1])
+    fw = a0 / 2.0
+    fh = a1 / 2.0
+    popup.geometry(f"{int(fw)}x{int(fh)}+{int(a0 / 2 - fw / 2)}+{int(a1 / 2 - fh / 2)}")
+    popup.configure(bg="white")
+    popup.title("Directrix- Loan")
+    popup.focus_set()
+    userid = 56790311881
+    userid = str(userid)
+    loan_details = Label(popup, text=f"Loan Details", font=("Arial", x(27), "bold", "underline"), bg="white")
+    loan_details.place(x=x(290), y=y(0))
+    expected_ = Label(popup, text=f"Amount: ", font=("Arial", x(22)), bg="white")
+    expected_.place(x=x(15), y=y(100))
+    income_ = Label(popup, text=f"Income: ", font=("Arial", x(22)), bg="white")
+    income_.place(x=x(15), y=y(151))
+    reason_ = Label(popup, text=f"Reason: ", font=("Arial", x(22)), bg="white")
+    reason_.place(x=x(15), y=y(241))
+    job_ = Label(popup, text=f"Job: ", font=("Arial", x(22)), bg="white")
+    job_.place(x=x(15), y=y(286))
+    time_ = Label(popup, text=f"time: ", font=("Arial", x(22)), bg="white")
+    time_.place(x=x(15), y=y(331))
+
+    expected = Entry(popup, width=x(20), font=("Helvetica", x(22)))
+    expected.place(x=x(190), y=y(100))
+    income = Entry(popup, width=x(20), font=("Helvetica", x(22)))
+    income.place(x=x(190), y=y(151))
+    reason = Entry(popup, width=x(20), font=("Helvetica", x(22)))
+    reason.place(x=x(190), y=y(241))
+    job = Entry(popup, width=x(20), font=("Helvetica", x(22)))
+    job.place(x=x(190), y=y(286))
+    time__ = Entry(popup, width=x(20), font=("Helvetica", x(22)))
+    time__.place(x=x(190), y=y(331))
+
+    close = Button(popup, text="submit", font=("Arial", x(15)), bg="#FFCF61",
+                   command=popup.destroy)
+    close.place(x=x(275), y=y(380))
+    close = Button(popup, text="Cancel", font=("Arial", x(15)), bg="#FFCF61",
+                   command=popup.destroy)
+    close.place(x=x(400), y=y(380))
+
+    inc = input("ANNUAL INCOME:")
+    if inc == "":
+        create_popup(0, "Amount cannot be empty")
+    try:
+        inc = int(float(inc))
+    except:
+        create_popup(0, "Amount is not integer")
+        return
+    if inc == 0:
+        create_popup(0, "Amount cannot be 0")
+        return
+    if inc < 0:
+        create_popup(0, "Amount cannot be negative")
+        return
+
+    exp = input(" EXPECTED AMOUNT:")
+    if exp == "":
+        create_popup(0, "Amount cannot be empty")
+        return
+    try:
+        exp = int(exp)
+    except:
+        create_popup(0, "Amount is not integer")
+        return
+    if exp == 0:
+        create_popup(0, "Amount cannot be 0")
+        return
+    if exp < 0:
+        create_popup(0, "Amount cannot be negative")
+        return
+    if exp >= (inc) * 7:
+        create_popup(0, "Amount is too large")
+        return
+    else:
+        print("You are eligible for opting a loan from our bank")
+
+
+    '''c_s = input("CREDIT SCORE:")
+    if c_s == "":
+        create_popup(0, "detail cannot be empty")
+    try:
+        c_s = int(float(c_s))
+    except:
+        create_popup(0, "Amount is not integer")
+        return
+    if c_s == 0:
+        create_popup(0, "detail cannot be 0")
+        return
+    if c_s < 0:
+        create_popup(0, "deatil cannot be negative")
+        return
+    if c_s < 700:
+        print("NOT ELIGIBLE BECAUSE YOUR CREDIT SCORE IS LESS")
+        return
+    else:
+        print("ELIGIBLE")'''
+
+    job = input("YOUR OCCUPATION:")
+    if job == "":
+        create_popup(0, "detail cannot be empty")
+        return
+    if len(job) > 10:
+        create_popup(0, "Please give a brief description about your occupation in less than 10 words")
+        return
+    reason = input("PURPOSE:")
+    if reason == "":
+        create_popup(0, "detail cannot be empty")
+        return
+    if len(reason)>25:
+        create_popup(0, "Please give a genuine reason in less than 25 words")
+        return
+
+    till_when = input("TILL WHEN WILL YOU KEEP THE AMOUNT(MONTHS) :")
+    if till_when == "":
+        create_popup(0, "detail cannot be empty")
+        return
+    try:
+        till_when = round(int(float(till_when)))  # roundoff
+        print("Dear customer you will recieve the expected amount in: " , till_when + "months")
+    except:
+        create_popup(0, "Detail must be integer")
+        return
+
+    rate = .03
+    confirm_c = (inc / 12) * rate
+    c_inc = (inc / 12) * 0.20
+    interest = exp * rate * till_when
+    amount = exp + interest
+    if c_inc > confirm_c:
+        print("ELIGIBLE")
+        print("AMOUNT :", amount, "INTEREST:", interest, "RATE:", rate)
+        confirmation = input("IF YOU WANNA CONFIRM PRESS 'Y' ELSE 'N' :")
+        if confirmation == "Y":
+            create_popup(1, "LOAN HAS BEEN CONFIRMED")
+
+        elif confirmation == "N":
+            create_popup(0, "CANCELLED")
+            return
+    else:
+        create_popup(0, "invalid details")
+        return
+    data = {"time": till_when, "exp": exp, "inc": inc, "reason": reason, "job": job, "interest": interest,
+            "amt": amount, "rate": rate}
+    root.data[str(userid)]["loan"] = data
+    savedata()
 
 def cacheupdate():
     with open("data/cache.json", "w") as f:
