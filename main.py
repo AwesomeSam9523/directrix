@@ -525,7 +525,6 @@ def fdp(userid):
     fw = a0 / 1.7
     fh = a1 / 1.8
     popup.geometry(f"{int(fw)}x{int(fh)}+{int(a0 / 2 - fw / 2)}+{int(a1 / 2 - fh / 2)}")
-    popup.mainloop()
     fdindex = IntVar(value=10)
     pdata = PrettyTable()
     pdata.field_names = ["S.No.", "Investm.", "Tenure", "Rate", "Payout", "Maturity"]
