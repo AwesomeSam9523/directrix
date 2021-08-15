@@ -270,7 +270,7 @@ def dashboard(data, *args):
     loanimg = Image.open("data/images/loan.jpg").resize((x(150), y(150)))
     loanimg = ImageTk.PhotoImage(loanimg)
     loanbtn = Button(root, text="Loan", compound=TOP, image=loanimg, font=("Arial", x(13), "bold"), bg="white",
-                     command=loan)
+                     command=partial(loan, data["id"]))
     loanbtn.place(x=x(800), y=y(300))
     loanbtn.image = loanimg
 
@@ -558,8 +558,8 @@ def fdp(userid):
     txt.insert("0.0", pdata)
     txt.configure(state=DISABLED)
 
-def loan():
-    userid = "58625216057"
+def loan(userid):
+    userid = str(userid)
     if root.data[userid].get("loan") is None:
         create_popup(0, "You already have a loan active")
         return
