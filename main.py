@@ -603,13 +603,13 @@ def loan():
     time__.place(x=x(190), y=y(331))
 
     sub = Button(popup, text="Submit", font=("Arial", x(15)), bg="#FFCF61",
-                   command=partial(loan_process, income, expected, job, reason, time__, userid))
+                   command=partial(loan_process, income, expected, job, reason, time__, userid, popup))
     sub.place(x=x(275), y=y(380))
     close = Button(popup, text="Cancel", font=("Arial", x(15)), bg="#FFCF61",
                    command=popup.destroy)
     close.place(x=x(400), y=y(380))
 
-def loan_process(income, expected, job, reason, time__, userid):
+def loan_process(income, expected, job, reason, time__, userid, popup):
     inc = income.get()
     if inc.replace(' ', '') == "":
         create_popup(0, "Amount cannot be empty")
@@ -683,6 +683,7 @@ def loan_process(income, expected, job, reason, time__, userid):
     data = {"time": till_when, "exp": exp, "inc": inc, "reason": reason, "job": job, "interest": interest,
             "amt": amount, "rate": rate}
     root.data[str(userid)]["loan"] = data
+    popup.destroy()
     savedata()
 
 def cacheupdate():
@@ -1101,8 +1102,5 @@ status = Label(root, font=("Helvetica", x(16)), bg="#ffffff", fg="#FF0000")
 fs = root.cache.setdefault("fs", True)
 if not fs: restore_root()
 cacheupdate()
-
-if root.cache.get("skip", False):
-    dashboard(root.accountsdata[str(cacheid)], (login_field, password_field, submit_login, submit_create, status))
 
 root.mainloop()
