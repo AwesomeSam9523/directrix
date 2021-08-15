@@ -576,8 +576,6 @@ def loan(userid):
     popup.configure(bg="white")
     popup.title("Directrix- Loan")
     popup.focus_set()
-    userid = 56790311881
-    userid = str(userid)
     loan_details = Label(popup, text=f"Loan Details", font=("Arial", x(27), "bold", "underline"), bg="white")
     loan_details.place(x=x(290), y=y(0))
     expected_ = Label(popup, text=f"Amount: ", font=("Arial", x(22)), bg="white")
