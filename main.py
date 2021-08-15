@@ -291,14 +291,14 @@ def dashboard(data, *args):
     fdimg = Image.open("data/images/fixeddep.png").resize((x(150), y(150)))
     fdimg = ImageTk.PhotoImage(fdimg)
     fdbtn = Button(root, text="Fixed Deposit", compound=TOP, image=fdimg, font=("Arial", x(13), "bold"), bg="white",
-                   command=fdp)
+                   command=partial(fdp, data["id"]))
     fdbtn.place(x=x(600), y=y(520))
     fdbtn.image = fdimg
 
     chpswdimg = Image.open("data/images/passwd.png").resize((x(150), y(150)))
     chpswdimg = ImageTk.PhotoImage(chpswdimg)
     chpswdbtn = Button(root, text="Change Pswd.", compound=TOP, image=chpswdimg, font=("Arial", x(13), "bold"), bg="white",
-                       command=changepass)
+                       command=partial(fdp, data["id"]))
     chpswdbtn.place(x=x(800), y=y(520))
     chpswdbtn.image = chpswdimg
 
@@ -578,20 +578,20 @@ def loan():
     loan_details = Label(popup, text=f"Loan Details", font=("Arial", x(27), "bold", "underline"), bg="white")
     loan_details.place(x=x(290), y=y(0))
     expected_ = Label(popup, text=f"Amount: ", font=("Arial", x(22)), bg="white")
-    expected_.place(x=x(15), y=y(100))
+    expected_.place(x=x(15), y=y(151))
     income_ = Label(popup, text=f"Income: ", font=("Arial", x(22)), bg="white")
-    income_.place(x=x(15), y=y(151))
+    income_.place(x=x(15), y=y(100))
     reason_ = Label(popup, text=f"Reason: ", font=("Arial", x(22)), bg="white")
     reason_.place(x=x(15), y=y(241))
     job_ = Label(popup, text=f"Job: ", font=("Arial", x(22)), bg="white")
     job_.place(x=x(15), y=y(286))
-    time_ = Label(popup, text=f"Time (in months):", font=("Arial", x(22)), bg="white")
+    time_ = Label(popup, text=f"Time (in M):", font=("Arial", x(22)), bg="white")
     time_.place(x=x(15), y=y(331))
 
     expected = Entry(popup, width=x(20), font=("Helvetica", x(22)))
-    expected.place(x=x(190), y=y(100))
+    expected.place(x=x(190), y=y(151))
     income = Entry(popup, width=x(20), font=("Helvetica", x(22)))
-    income.place(x=x(190), y=y(151))
+    income.place(x=x(190), y=y(100))
     reason = Entry(popup, width=x(20), font=("Helvetica", x(22)))
     reason.place(x=x(190), y=y(241))
     job = Entry(popup, width=x(20), font=("Helvetica", x(22)))
@@ -686,7 +686,7 @@ def cacheupdate():
     with open("data/cache.json", "w") as f:
         f.write(json.dumps(root.cache, indent=2))
 
-def changepass():
+def changepass(userid):
     picon = ImageTk.PhotoImage(Image.open("data/images/deposit_icon.png"))
     popup = Toplevel(root)
     popup.iconphoto(False, picon)
@@ -698,7 +698,6 @@ def changepass():
     popup.configure(bg="white")
     popup.title("Directrix- Change Password")
     popup.focus_set()
-    userid = 58625216057
 
     chp = Label(popup, text="Change Password", font=("Arial", x(30), "bold", "underline"), bg="white")
     chp.place(x=x(80), y=y(5))
@@ -766,7 +765,7 @@ def createstatements(userid, amount, t, reason):
     root.statements[str(userid)] = prev
     savedata()
 
-def create_acc():
+def create_acc(userid):
     picon = ImageTk.PhotoImage(Image.open("data/images/withdraw_icon.png"))
     popup = Toplevel(root)
     popup.iconphoto(False, picon)
@@ -780,8 +779,6 @@ def create_acc():
     popup.configure(bg="white")
     popup.title("Directrix- My Account")
     popup.focus_set()
-    userid = 35834643982
-    userid = str(userid)
     loan_, fd = True, True
     var = root.accountsdata.get(str(userid))
     name = var["name"]
@@ -795,7 +792,7 @@ def create_acc():
     balance = va["balance"]
     if str(userid) in root.fd.keys():
         fd = True
-    if str(userid) not in root.fd.keys():
+    else:
         fd = False
     if root.data[userid].get("loan") is not None:
         loan_ = True
@@ -832,10 +829,10 @@ def create_acc():
         loanf = Label(popup, text=f"Loan Taken: NO", font=("Arial", x(22)), bg="white")
         loanf.place(x=x(15), y=y(330))
     if fd:
-        fdt = Label(popup, text=f"Fd opted: Yes", font=("Arial", x(22)), bg="white")
+        fdt = Label(popup, text=f"FD opted: Yes", font=("Arial", x(22)), bg="white")
         fdt.place(x=x(450), y=y(330))
     else:
-        fdg = Label(popup, text=f"Fd opted: NO", font=("Arial", x(22)), bg="white")
+        fdg = Label(popup, text=f"FD opted: No", font=("Arial", x(22)), bg="white")
         fdg.place(x=x(450), y=y(330))
 
     myTable = PrettyTable(["type", "amount", "reason", "time"])
@@ -853,6 +850,7 @@ def create_acc():
     close = Button(popup, text="Close", font=("Arial", x(15)), bg="#FFCF61",
                    command=popup.destroy)
     close.place(x=x(335), y=y(510))
+
 class BankStatement:
     def __init__(self, userid:int, txt:Text):
         self.sort = False
