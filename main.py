@@ -165,7 +165,7 @@ def submit_data():
     submit_create.place_forget()
     status.place_forget()
 
-    dashbg = Image.open("data/images/create_account.png")
+    dashbg = Image.open("data/images/my_account.png")
     dashbg = dashbg.resize(root.wm_maxsize())
 
     root.bgimg = ImageTk.PhotoImage(dashbg)
@@ -284,7 +284,7 @@ def dashboard(data, *args):
     viewaccimg = Image.open("data/images/viewacc.png").resize((x(150), y(150)))
     viewaccimg = ImageTk.PhotoImage(viewaccimg)
     viewaccbtn = Button(root, text="My Account", compound=TOP, image=viewaccimg, font=("Arial", x(13), "bold"), bg="white",
-                        command=create_acc)
+                        command=partial(my_acc, data["id"]))
     viewaccbtn.place(x=x(400), y=y(520))
     viewaccbtn.image = viewaccimg
 
@@ -472,7 +472,7 @@ def fdp():
         else:
             create_popup(0, "Please select an option!")
 
-    picon = ImageTk.PhotoImage(Image.open("data/images/withdraw_icon.png"))
+    picon = ImageTk.PhotoImage(Image.open("data/images/fixeddep_icon.png"))
     popup = Toplevel(root)
     popup.iconphoto(False, picon)
     popup.grab_set()
@@ -560,7 +560,7 @@ def loan():
     if root.data[userid].get("loan") is None:
         var = root.data.get(str(userid)).get("loan")
         return
-    picon = ImageTk.PhotoImage(Image.open("data/images/withdraw_icon.png"))
+    picon = ImageTk.PhotoImage(Image.open("data/images/loan_icon.png"))
     popup = Toplevel(root)
     popup.iconphoto(False, picon)
     popup.grab_set()
@@ -686,8 +686,8 @@ def cacheupdate():
     with open("data/cache.json", "w") as f:
         f.write(json.dumps(root.cache, indent=2))
 
-def changepass(userid):
-    picon = ImageTk.PhotoImage(Image.open("data/images/deposit_icon.png"))
+def changepass():
+    picon = ImageTk.PhotoImage(Image.open("data/images/passwd_icon.png"))
     popup = Toplevel(root)
     popup.iconphoto(False, picon)
     popup.grab_set()
@@ -698,6 +698,7 @@ def changepass(userid):
     popup.configure(bg="white")
     popup.title("Directrix- Change Password")
     popup.focus_set()
+
 
     chp = Label(popup, text="Change Password", font=("Arial", x(30), "bold", "underline"), bg="white")
     chp.place(x=x(80), y=y(5))
@@ -765,8 +766,8 @@ def createstatements(userid, amount, t, reason):
     root.statements[str(userid)] = prev
     savedata()
 
-def create_acc(userid):
-    picon = ImageTk.PhotoImage(Image.open("data/images/withdraw_icon.png"))
+def my_acc(userid):
+    picon = ImageTk.PhotoImage(Image.open("data/images/viewacc_icon.png"))
     popup = Toplevel(root)
     popup.iconphoto(False, picon)
     popup.grab_set()
@@ -944,7 +945,7 @@ class BankStatement:
         self.show()
 
 def showstatement():
-    picon = ImageTk.PhotoImage(Image.open("data/images/withdraw_icon.png"))
+    picon = ImageTk.PhotoImage(Image.open("data/images/statements_icon.png"))
     popup = Toplevel(root)
     popup.iconphoto(False, picon)
     popup.grab_set()
