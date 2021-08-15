@@ -880,7 +880,7 @@ class BankStatement:
         amtfil = self.filters["amt"]
         rfil = self.filters["reason"]
         tfil = self.filters["old"]
-
+        prerows = []
         for i in self.allst:
             if sortval_ != 0:
                 if (sortval_ == 1 and i["type"] != "C") or (sortval_ == 2 and i["type"] != "D"): continue
@@ -905,8 +905,10 @@ class BankStatement:
             dt_object = str(dt_object).split("-")
             dt_object.reverse()
             dt_object = ".".join(dt_object)
-            self.pt.add_row([count, type_, amt, dt_object, reas])
+            prerows.append([count, type_, amt, dt_object, reas])
             count += 1
+        prerows.reverse()
+        for i in prerows: self.pt.add_row(i)
         self.insert(self.pt)
 
     def update(self):
