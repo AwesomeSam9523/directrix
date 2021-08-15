@@ -354,6 +354,9 @@ def withdraw(userid):
 def withdraw_process(userid, ent, txt, balance, popup):
     withd = ent.get().replace(" ", "")
     reason = txt.get("0.0", END)
+    if len(reason) > 15:
+        create_popup(0, "Explain the reason in less than 15 characters")
+        return
     if withd == "":
         create_popup(0, "Amount cannot be empty")
         return
@@ -421,6 +424,9 @@ def deposit(userid):
 def deposit_process(userid, ent, txt, balance, popup):
     dep = ent.get().replace(" ", "")
     reason = txt.get("0.0", END)
+    if len(reason) > 15:
+        create_popup(0, "Explain the reason in less than 15 characters")
+        return
     if dep == "":
         create_popup(0, "Amount cannot be empty")
         return
