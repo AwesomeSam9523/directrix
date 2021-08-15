@@ -165,7 +165,7 @@ def submit_data():
     submit_create.place_forget()
     status.place_forget()
 
-    dashbg = Image.open("data/images/my_account.png")
+    dashbg = Image.open("data/images/create_account.png")
     dashbg = dashbg.resize(root.wm_maxsize())
 
     root.bgimg = ImageTk.PhotoImage(dashbg)
@@ -277,7 +277,7 @@ def dashboard(data, *args):
     statementsimg = Image.open("data/images/statements.png").resize((x(150), y(150)))
     statementsimg = ImageTk.PhotoImage(statementsimg)
     statementsbtn = Button(root, text="View Statement", compound=TOP, bg="white", image=statementsimg, font=("Arial", x(13), "bold"),
-                           command=showstatement)
+                           command=partial(showstatement, data["id"]))
     statementsbtn.place(x=x(1000), y=y(300))
     statementsbtn.image = statementsimg
 
@@ -805,11 +805,14 @@ def my_acc(userid):
         loan_ = False
     v = root.statements.get(str(userid), [])
     root.statements[str(userid)] = v
-    a = v[-1]
-    type = a["type"]
-    amount = a["amt"]
-    reason = a["r"]
-    time = a["time"]
+    if len(v) != 0:
+        a = v[-1]
+        type = a["type"]
+        amount = a["amt"]
+        reason = a["r"]
+        time = a["time"]
+    else:
+        type, amoumt, reason, time = "", "", "", ""
 
     acount_details = Label(popup, text=f"Account Details", font=("Arial", x(27), "bold", "underline"), bg="white")
     acount_details.place(x=x(260), y=y(0))
@@ -957,7 +960,7 @@ class BankStatement:
         self.reasonhas.delete(0, END)
         self.show()
 
-def showstatement():
+def showstatement(userid):
     picon = ImageTk.PhotoImage(Image.open("data/images/statements_icon.png"))
     popup = Toplevel(root)
     popup.iconphoto(False, picon)
@@ -971,8 +974,6 @@ def showstatement():
     popup.configure(bg="white")
     popup.title("Directrix- Statement")
     popup.focus_set()
-    userid = 35834643982
-    userid = str(userid)
 
     txt = Text(popup, font=("Courier New", x(17)), bg="white", width=x(70), height=y(15))
     txt.place(x=x(15), y=y(8))
