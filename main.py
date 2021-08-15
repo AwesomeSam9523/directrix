@@ -5,7 +5,7 @@ import random, datetime
 import time, json, re
 from tkinter import *
 from tkinter import messagebox
-from PIL import Image, ImageFont, ImageDraw, ImageTk
+from PIL import Image, ImageTk
 from functools import partial
 from prettytable import PrettyTable
 
@@ -457,7 +457,7 @@ fd_plans = [
     {"amt": 100000, "time": 36, "rate": 6.60, "payout": 21136, "mat": 121136},  # (8)
 ]
 
-def fdp():
+def fdp(userid):
 
     def fdstart():
         index = fdindex.get()
@@ -468,7 +468,7 @@ def fdp():
             savedata()
             popup.destroy()
             create_popup(1, "Success!")
-            fdp()
+            fdp(userid)
         else:
             create_popup(0, "Please select an option!")
 
@@ -855,7 +855,7 @@ def my_acc(userid):
 class BankStatement:
     def __init__(self, userid:int, txt:Text):
         self.sort = False
-        self.pt=PrettyTable()
+        self.pt = PrettyTable()
         self.pt.title = "Bank Statement(s)"
         self.pt.field_names = ["S.No.", "Type", "Amount", "Date", "Reason"]
         self.userid = str(userid)
@@ -879,7 +879,7 @@ class BankStatement:
                 if (sortval_ == 1 and i["type"] != "C") or (sortval_ == 2 and i["type"] != "D"): continue
             type_ = "Credit" if i["type"] == "C" else "Debit"
 
-            amt = abs(i["amt"])
+            amt = i["amt"]
             if amtfil["l"] == 0:
                 if not amt > amtfil["g"]: continue
             else:
@@ -921,8 +921,10 @@ class BankStatement:
         reasonval = self.reasonval.get()
 
         if reasonval != 0:
-            if reasonval == 1: val = self.reasonhas.get()
-            else: val = self.reasonis.get()
+            if reasonval == 1:
+                val = self.reasonhas.get()
+            else:
+                val = self.reasonis.get()
             self.filters["reason"] = {"type":reasonval, "val":val}
         else:
             self.filters["reason"]["type"] = 0
