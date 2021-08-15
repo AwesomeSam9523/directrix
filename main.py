@@ -534,7 +534,7 @@ def fdp(userid):
     fdindex = IntVar(value=10)
     pdata = PrettyTable()
     pdata.field_names = ["S.No.", "Investm.", "Tenure", "Rate", "Payout", "Maturity"]
-    txt = Text(popup, font=("Courier New", x(18)), bg="white", width=x(67), height=y(13))
+    txt = Text(popup, font=("Courier New", x(18)), bg="white", width=x(67), height=y(15))
     txt.place(x=x(52), y=y(70))
     fdwel = Label(popup, text=f"Choose F.D. Plan", font=("Arial", x(27), "bold", "underline"), bg="white")
     fdwel.place(x=x(300), y=y(5))
@@ -561,7 +561,7 @@ def fdp(userid):
 def loan():
     userid = "58625216057"
     if root.data[userid].get("loan") is None:
-        var = root.data.get(str(userid)).get("loan")
+        create_popup(0, "You already have a loan active")
         return
     picon = ImageTk.PhotoImage(Image.open("data/images/loan_icon.png"))
     popup = Toplevel(root)
@@ -786,6 +786,7 @@ def my_acc(userid):
     popup.focus_set()
     loan_, fd = True, True
     var = root.accountsdata.get(str(userid))
+    userid = str(userid)
     name = var["name"]
     email = var["email"]
     email2 = email.split("@")[0]
@@ -801,7 +802,7 @@ def my_acc(userid):
         fd = False
     if root.data[userid].get("loan") is not None:
         loan_ = True
-    if root.data[userid].get("loan") is not None:
+    else:
         loan_ = False
     v = root.statements.get(str(userid), [])
     root.statements[str(userid)] = v
@@ -812,7 +813,7 @@ def my_acc(userid):
         reason = a["r"]
         time = a["time"]
     else:
-        type, amoumt, reason, time = "", "", "", ""
+        type, amount, reason, time = "", "", "", ""
 
     acount_details = Label(popup, text=f"Account Details", font=("Arial", x(27), "bold", "underline"), bg="white")
     acount_details.place(x=x(260), y=y(0))
@@ -871,7 +872,7 @@ class BankStatement:
         self.pt.field_names = ["S.No.", "Type", "Amount", "Date", "Reason"]
         self.userid = str(userid)
         self.widget = txt
-        self.allst = root.statements[self.userid]
+        self.allst = root.statements.get(self.userid, [])
         self.filters = {"amt":{"g":0, "l":0}, "old":0, "reason":{"type":0, "val":""}}
         self.sortval, self.reasonval, self.older = IntVar(), IntVar(), IntVar()
         self.gamtval, self.lamtval, self.reasonis, self.reasonhas = Entry(), Entry(), Entry(), Entry()
