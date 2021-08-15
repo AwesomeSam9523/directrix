@@ -527,6 +527,7 @@ def fdp():
     fw = a0 / 1.7
     fh = a1 / 1.8
     popup.geometry(f"{int(fw)}x{int(fh)}+{int(a0 / 2 - fw / 2)}+{int(a1 / 2 - fh / 2)}")
+    popup.mainloop()
     fdindex = IntVar(value=10)
     pdata = PrettyTable()
     pdata.field_names = ["S.No.", "Investm.", "Tenure", "Rate", "Payout", "Maturity"]
@@ -557,17 +558,7 @@ def fdp():
 def loan():
     userid = "58625216057"
     if root.data[userid].get("loan") is None:
-        print("Respected Customer, You have already applied for a loan")
         var = root.data.get(str(userid)).get("loan")
-        print(var)
-        print("exp:", var["exp"])
-        print("time:", var["time"])
-        print("Interest Rate:", var["rate"])
-        print("income:", var["inc"])
-        print("amt:", var["amt"])
-        print("interest amount:", var["rate"])
-        print("occupation:", var["job"])
-        print("purpose:", var["reason"])
         return
     picon = ImageTk.PhotoImage(Image.open("data/images/withdraw_icon.png"))
     popup = Toplevel(root)
@@ -608,14 +599,16 @@ def loan():
     time__ = Entry(popup, width=x(20), font=("Helvetica", x(22)))
     time__.place(x=x(190), y=y(331))
 
-    close = Button(popup, text="submit", font=("Arial", x(15)), bg="#FFCF61",
-                   command=popup.destroy)
-    close.place(x=x(275), y=y(380))
+    sub = Button(popup, text="Submit", font=("Arial", x(15)), bg="#FFCF61",
+                   command=partial(loan_process, income, expected, job, reason, time__, userid))
+    sub.place(x=x(275), y=y(380))
     close = Button(popup, text="Cancel", font=("Arial", x(15)), bg="#FFCF61",
                    command=popup.destroy)
     close.place(x=x(400), y=y(380))
 
-    inc = input("ANNUAL INCOME:")
+
+def loan_process(income, expected, job, reason, time__, userid):
+    inc = income.get()
     if inc == "":
         create_popup(0, "Amount cannot be empty")
     try:
@@ -630,7 +623,7 @@ def loan():
         create_popup(0, "Amount cannot be negative")
         return
 
-    exp = input(" EXPECTED AMOUNT:")
+    exp = expected.get()
     if exp == "":
         create_popup(0, "Amount cannot be empty")
         return
@@ -650,29 +643,28 @@ def loan():
         return
     else:
         print("You are eligible for opting a loan from our bank")
-    job = input("YOUR OCCUPATION:")
+    job = job.get()
     if job == "":
         create_popup(0, "detail cannot be empty")
         return
     if len(job) > 10:
         create_popup(0, "Please give a brief description about your occupation in less than 10 words")
         return
-    reason = input("PURPOSE:")
+    reason = reason.get()
     if reason == "":
         create_popup(0, "detail cannot be empty")
         return
-    if len(reason)>25:
+    if len(reason) > 25:
         create_popup(0, "Please give a genuine reason in less than 25 words")
         return
 
-    till_when = input("TILL WHEN WILL YOU KEEP THE AMOUNT(MONTHS) :")
+    till_when = time__.get()
     if till_when == "":
         create_popup(0, "detail cannot be empty")
         return
     try:
         till_when = round(int(float(till_when)))  # roundoff
-        print("Dear customer you will recieve the expected amount in: " , till_when + "months")
-    except:
+    except Exception as e:
         create_popup(0, "Detail must be integer")
         return
 
@@ -682,9 +674,8 @@ def loan():
     interest = exp * rate * till_when
     amount = exp + interest
     if c_inc > confirm_c:
-        print("ELIGIBLE")
         print("AMOUNT :", amount, "INTEREST:", interest, "RATE:", rate)
-        confirmation = input("IF YOU WANNA CONFIRM PRESS 'Y' ELSE 'N' :")
+        confirmation = "N"
         if confirmation == "Y":
             create_popup(1, "LOAN HAS BEEN CONFIRMED")
 
