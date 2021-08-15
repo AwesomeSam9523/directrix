@@ -907,6 +907,7 @@ class BankStatement:
             dt_object = ".".join(dt_object)
             prerows.append([count, type_, amt, dt_object, reas])
             count += 1
+
         prerows.reverse()
         for i in prerows: self.pt.add_row(i)
         self.insert(self.pt)
