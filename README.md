@@ -7,11 +7,12 @@ This is a GUI bank made using python. This is a demo about how bank management s
 
 ## Features
 - ### Customers
-  - Open & close a bank account
-  - Minimum balance to be maintained
+  - Open a bank account
   - View their bank statements
   - Take loans on a rate of interest
   - Open a fixed deposit (F.D.)
+  - Change Password
+  - Deposit & Withdraw money
 
 ## Approach
 The frontend is made using `tkinter` and all data is saved in `json` file.
