@@ -585,7 +585,7 @@ def loan():
     reason_.place(x=x(15), y=y(241))
     job_ = Label(popup, text=f"Job: ", font=("Arial", x(22)), bg="white")
     job_.place(x=x(15), y=y(286))
-    time_ = Label(popup, text=f"time: ", font=("Arial", x(22)), bg="white")
+    time_ = Label(popup, text=f"Time (in months):", font=("Arial", x(22)), bg="white")
     time_.place(x=x(15), y=y(331))
 
     expected = Entry(popup, width=x(20), font=("Helvetica", x(22)))
@@ -606,10 +606,9 @@ def loan():
                    command=popup.destroy)
     close.place(x=x(400), y=y(380))
 
-
 def loan_process(income, expected, job, reason, time__, userid):
     inc = income.get()
-    if inc == "":
+    if inc.replace(' ', '') == "":
         create_popup(0, "Amount cannot be empty")
     try:
         inc = int(float(inc))
@@ -624,7 +623,7 @@ def loan_process(income, expected, job, reason, time__, userid):
         return
 
     exp = expected.get()
-    if exp == "":
+    if exp.replace(' ', '') == "":
         create_popup(0, "Amount cannot be empty")
         return
     try:
@@ -641,30 +640,30 @@ def loan_process(income, expected, job, reason, time__, userid):
     if exp >= (inc) * 7:
         create_popup(0, "Amount is too large")
         return
-    else:
-        print("You are eligible for opting a loan from our bank")
-    job = job.get()
-    if job == "":
-        create_popup(0, "detail cannot be empty")
-        return
-    if len(job) > 10:
-        create_popup(0, "Please give a brief description about your occupation in less than 10 words")
-        return
+
     reason = reason.get()
-    if reason == "":
-        create_popup(0, "detail cannot be empty")
+    if reason.replace(' ', '') == "":
+        create_popup(0, "Reason cannot be empty")
         return
     if len(reason) > 25:
         create_popup(0, "Please give a genuine reason in less than 25 words")
         return
 
+    job = job.get()
+    if job.replace(' ', '') == "":
+        create_popup(0, "Job cannot be empty")
+        return
+    if len(job) > 20:
+        create_popup(0, "Please give a brief description about your occupation in less than 20 words")
+        return
+
     till_when = time__.get()
     if till_when == "":
-        create_popup(0, "detail cannot be empty")
+        create_popup(0, "Time period cannot be empty")
         return
     try:
         till_when = round(int(float(till_when)))  # roundoff
-    except Exception as e:
+    except:
         create_popup(0, "Detail must be integer")
         return
 
@@ -674,16 +673,9 @@ def loan_process(income, expected, job, reason, time__, userid):
     interest = exp * rate * till_when
     amount = exp + interest
     if c_inc > confirm_c:
-        print("AMOUNT :", amount, "INTEREST:", interest, "RATE:", rate)
-        confirmation = "N"
-        if confirmation == "Y":
-            create_popup(1, "LOAN HAS BEEN CONFIRMED")
-
-        elif confirmation == "N":
-            create_popup(0, "CANCELLED")
-            return
+        create_popup(1, "Loan has been confirmed")
     else:
-        create_popup(0, "invalid details")
+        create_popup(0, "Invalid Details")
         return
     data = {"time": till_when, "exp": exp, "inc": inc, "reason": reason, "job": job, "interest": interest,
             "amt": amount, "rate": rate}
