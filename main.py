@@ -485,8 +485,6 @@ def fdp(userid):
     popup.configure(bg="white")
     popup.title("Directrix- Fixed Deposit")
     popup.focus_set()
-    userid = 56790311881
-    userid = str(userid)
 
     if str(userid) in root.fd.keys():
         var = root.fd.get(str(userid))
