@@ -298,7 +298,7 @@ def dashboard(data, *args):
     chpswdimg = Image.open("data/images/passwd.png").resize((x(150), y(150)))
     chpswdimg = ImageTk.PhotoImage(chpswdimg)
     chpswdbtn = Button(root, text="Change Pswd.", compound=TOP, image=chpswdimg, font=("Arial", x(13), "bold"), bg="white",
-                       command=partial(fdp, data["id"]))
+                       command=partial(changepass, data["id"]))
     chpswdbtn.place(x=x(800), y=y(520))
     chpswdbtn.image = chpswdimg
 
@@ -686,7 +686,7 @@ def cacheupdate():
     with open("data/cache.json", "w") as f:
         f.write(json.dumps(root.cache, indent=2))
 
-def changepass():
+def changepass(userid):
     picon = ImageTk.PhotoImage(Image.open("data/images/passwd_icon.png"))
     popup = Toplevel(root)
     popup.iconphoto(False, picon)
