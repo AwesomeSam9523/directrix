@@ -528,7 +528,7 @@ def fdp(userid):
     fdindex = IntVar(value=10)
     pdata = PrettyTable()
     pdata.field_names = ["S.No.", "Investm.", "Tenure", "Rate", "Payout", "Maturity"]
-    txt = Text(popup, font=("Courier New", x(18)), bg="white", width=x(59), height=y(13))
+    txt = Text(popup, font=("Courier New", x(18)), bg="white", width=x(67), height=y(13))
     txt.place(x=x(52), y=y(70))
     fdwel = Label(popup, text=f"Choose F.D. Plan", font=("Arial", x(27), "bold", "underline"), bg="white")
     fdwel.place(x=x(300), y=y(5))
@@ -833,10 +833,14 @@ def my_acc(userid):
         fdg = Label(popup, text=f"FD opted: No", font=("Arial", x(22)), bg="white")
         fdg.place(x=x(450), y=y(330))
 
-    myTable = PrettyTable(["type", "amount", "reason", "time"])
-
+    myTable = PrettyTable(["Type", "Amount", "Reason", "Date"])
+    dt_object = datetime.datetime.fromtimestamp(time).date()
+    dt_object = str(dt_object).split("-")
+    dt_object.reverse()
+    dt_object = ".".join(dt_object)
+    type = "Credit" in type == "C" or "Debit"
     # Add rows
-    myTable.add_row([type, amount, reason, time])
+    myTable.add_row([type, amount, reason, dt_object])
     widget = Text(popup, font=("Courier New", x(17)), bg="white", width=x(60), height=y(6))
     widget.place(x=x(15), y=y(380))
     widget.configure(state=NORMAL)
