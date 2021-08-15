@@ -547,7 +547,7 @@ def fdp(userid):
         plan.place(x=x(25), y=y(yval))
         pdata.add_row([sno, i["amt"], i["time"], f"{i['rate']}%", i["payout"], i["mat"]])
         sno += 1
-        yval += y(27)
+        yval += y(28)
 
     acc = Button(popup, text="Start F.D.", font=("Arial", x(15)), bg="#81a9fd",
                    command=fdstart)
@@ -560,7 +560,7 @@ def fdp(userid):
 
 def loan(userid):
     userid = str(userid)
-    if root.data[userid].get("loan") is None:
+    if root.data[userid].get("loan") is not None:
         create_popup(0, "You already have a loan active")
         return
     picon = ImageTk.PhotoImage(Image.open("data/images/loan_icon.png"))
